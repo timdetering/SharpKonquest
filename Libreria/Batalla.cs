@@ -16,7 +16,7 @@ namespace SharpKonquest.Clases
             GanaDefensor,
             Empate
         }
-      private static Random generadorAleatorios = new Random();
+        private static Aleatorios generadorAleatorios = new Aleatorios();
 
         public static Batalla SimularBatalla(int NavesFlota, int TecnoFlota, int NavesDestino, int TecnoDestino)
         {

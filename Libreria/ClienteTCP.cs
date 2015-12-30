@@ -5,15 +5,17 @@ using System.Net;
 using System.Net.Sockets;
 using System.Windows.Forms;
 using System.Text.RegularExpressions;
+using System.IO;
+using System.IO.Compression;
 
-namespace SharpKonquest.Clases
+namespace System.TCP
 {
-    public delegate void DelegadoComandoRecibido(int comando, string[] parametros, string cadena, ClienteTCP clienteTcp);
-     
+    public delegate void DelegadoComandoRecibido(ushort comando, string[] parametros, string cadena, ClienteTCP clienteTcp);
+
     /// <summary>
     /// Administra un objecto TcpClient para enviar y recibir comandos de una sola línea a traves de la conexión
     /// </summary>
-   public class ClienteTCP
+    public class ClienteTCP:IDisposable
     {
         public event DelegadoComandoRecibido DatosRecibidos;
         public TcpClient TcpClient;
@@ -27,14 +29,15 @@ namespace SharpKonquest.Clases
         /// </summary>
         public string Nombre;
 
-        public ClienteTCP(string host, int puerto,string nombre)
+        public ClienteTCP(string host, int puerto, string nombre)
         {
             this.TcpClient = new TcpClient();
             this.TcpClient.Connect(host, puerto);
             Nombre = nombre;
+            Comprimir = true;
 
             Instancias.Add(this);
-            if (sub == null || sub.IsAlive==false)
+            if (sub == null || sub.IsAlive == false)
             {
                 sub = new System.Threading.Thread(new System.Threading.ThreadStart(ComprobarDatosRecibidos));
                 sub.Name = "ComprobarDatosTCP";
@@ -46,6 +49,7 @@ namespace SharpKonquest.Clases
         {
             this.TcpClient = cliente;
             Nombre = nombre;
+            Comprimir = true;
 
             Instancias.Add(this);
             if (sub == null || sub.IsAlive == false)
@@ -56,85 +60,44 @@ namespace SharpKonquest.Clases
             }
         }
 
+        /// <summary>
+        /// Instancias abiertas de clientes tcp
+        /// </summary>
         private static List<ClienteTCP> Instancias = new List<ClienteTCP>();
         private static System.Threading.Thread sub;
 
         /// <summary>
         /// Comprueba si se han recibido datos del servidor
         /// </summary>
-       private static void ComprobarDatosRecibidos()
-       {
-           while (true)
-           {
-               try
-               {
-                   System.Threading.Thread.Sleep(10);
-                   System.Windows.Forms.Application.DoEvents();
+        private static void ComprobarDatosRecibidos()
+        {
+            while (true)
+            {
+                try
+                {
+                    System.Threading.Thread.Sleep(10);
+                    System.Windows.Forms.Application.DoEvents();
 
-                   foreach (ClienteTCP cliente in Instancias)
-                   {
-                       if (cliente.TcpClient.Connected == false)
-                       {
-                           Instancias.Remove(cliente);
-                           break;
-                       }
-                       if (cliente.TcpClient.Available > 0 && cliente.DatosRecibidos!=null)
-                       {
-                           System.Threading.Thread subproceso = new System.Threading.Thread(
-                               new System.Threading.ParameterizedThreadStart(DatosDisponibles));
-                           subproceso.Name = "EventoDatosDisponibles";
-                           subproceso.Start(cliente);
-                           Application.DoEvents();
-                       }
-                   }
-               }
-               catch { }
-           }
-       }
-
-       private static void DatosDisponibles(object arg)
-       {
-           ClienteTCP cliente = (ClienteTCP)arg;
-           if (cliente.DatosRecibidos != null)
-           {
-               byte[] buffer = new byte[cliente.TcpClient.Available];
-               NetworkStream stream = cliente.TcpClient.GetStream();
-
-               stream.Read(buffer, 0, buffer.Length);
-
-               string cadenaDatos = Encoding.UTF8.GetString(buffer).Trim();
-
-               foreach (string cadena in cadenaDatos.Split(new string[] { "\n" }, StringSplitOptions.RemoveEmptyEntries))
-               {
-                   try
-                   {
-                       int comando = int.Parse(cadena.Trim().Substring(0, cadena.IndexOf(' ')));
-                       string[] parametros = ObtenerSubCadenas(cadena);
-
-                       //Llamar al evento
-
-                       if (cliente.ControlInvoke != null)
-                       {
-                           foreach (Delegate delegado in cliente.DatosRecibidos.GetInvocationList())
-                           {
-                               cliente.ControlInvoke.Invoke(delegado, comando, parametros, cadena, cliente);
-                               Application.DoEvents();
-                               if (cliente.DatosRecibidos == null)
-                                   break;
-                           }
-                       }
-                       else
-                       {
-                           cliente.DatosRecibidos(comando, parametros, cadena, cliente);
-                           Application.DoEvents();
-                           if (cliente.DatosRecibidos == null)
-                               break;
-                       }
-                   }
-                   catch (Exception e) { Console.WriteLine("Error: " + e.ToString()); }
-               }
-           }
-       }
+                    foreach (ClienteTCP cliente in Instancias)
+                    {
+                        if (cliente.TcpClient.Connected == false)
+                        {
+                            Instancias.Remove(cliente);
+                            break;
+                        }
+                        if (cliente.TcpClient.Available > 0 && cliente.DatosRecibidos != null)
+                        {
+                            System.Threading.Thread subproceso = new System.Threading.Thread(
+                                new System.Threading.ParameterizedThreadStart(DatosDisponibles));
+                            subproceso.Name = "EventoDatosDisponibles";
+                            subproceso.Start(cliente);
+                            Application.DoEvents();
+                        }
+                    }
+                }
+                catch { }
+            }
+        }
 
         private static Regex SubCadenas = new Regex(
     @"'((?:.|\s)*?)'",
@@ -144,7 +107,7 @@ namespace SharpKonquest.Clases
     | RegexOptions.Compiled
     );
 
-        internal static string[] ObtenerSubCadenas(string cadena)
+        public static string[] ObtenerSubCadenas(string cadena)
         {
 
             List<string> res = new List<string>();
@@ -158,20 +121,100 @@ namespace SharpKonquest.Clases
         /// <summary>
         /// Envia datos al servidor
         /// </summary>
-        public void EnviarDatos(int comando, string datos)
+        public void EnviarComando(ushort comando, string datos)
         {
             if (TcpClient.Connected == false)
                 return;
 
-            string texto = comando + " " + datos + "\r\n";
+            byte[] array = Encoding.UTF8.GetBytes(datos);
+
+            bool comprimido = false;
+            if (Comprimir)
+            {
+               byte[] arrayComprimido = LZMA.Compress(array);
+               if (arrayComprimido.Length < array.Length)
+               {
+                   comprimido = true;
+                   array = arrayComprimido;
+               }
+            }
+
+            TcpClient.SendBufferSize = array.Length + 15;
+
             if (TcpClient != null)
             {
                 NetworkStream stream = TcpClient.GetStream();
-                byte[] data = Encoding.UTF8.GetBytes(texto);
+                BinaryWriter escritor = new BinaryWriter(stream);
 
-                stream.Write(data, 0, data.Length);
+                escritor.Write(comprimido);
+                escritor.Write((UInt16)comando);
+                escritor.Write((Int32)array.Length);
+                escritor.Write(array);
+
+                escritor.Flush();
 
                 System.Windows.Forms.Application.DoEvents();
+            }
+        }
+
+        public bool Comprimir;
+
+        /// <summary>
+        /// Se llama cuando existen datos disponibles para un cliente
+        /// </summary>
+        private static void DatosDisponibles(object arg)
+        {
+            ClienteTCP cliente = (ClienteTCP)arg;
+            if (cliente.DatosRecibidos != null)
+            {
+                NetworkStream stream = cliente.TcpClient.GetStream();
+                BinaryReader lector = new BinaryReader(stream);
+
+                while (true)
+                {
+                    try
+                    {
+                        if (cliente.TcpClient.Available > 0)
+                        {
+                            bool comprimido = lector.ReadBoolean();
+                            ushort comando = lector.ReadUInt16();
+                            int longitudArray = lector.ReadInt32();
+                            byte[] datos = lector.ReadBytes((int)longitudArray);
+
+                            if (comprimido)
+                                datos = LZMA.Decompress(datos);
+
+                            string cadena = Encoding.UTF8.GetString(datos);
+
+                            string[] parametros = ObtenerSubCadenas(cadena);
+
+                            //Llamar al evento
+                            if (cliente.ControlInvoke != null)
+                            {
+                                foreach (Delegate delegado in cliente.DatosRecibidos.GetInvocationList())
+                                {
+                                    cliente.ControlInvoke.Invoke(delegado, new object[] { comando, parametros, cadena, cliente });
+                                    Application.DoEvents();
+                                    if (cliente.DatosRecibidos == null)
+                                        break;
+                                }
+                            }
+                            else
+                            {
+                                cliente.DatosRecibidos(comando, parametros, cadena, cliente);
+                                Application.DoEvents();
+                                if (cliente.DatosRecibidos == null)
+                                    break;
+                            }
+                        }
+                        else
+                            break;
+                    }
+                    catch
+                    {
+                        break;
+                    }
+                }
             }
         }
 
@@ -180,11 +223,21 @@ namespace SharpKonquest.Clases
         /// </summary>
         public void Desconectar()
         {
-            EnviarDatos(11, "Desconectar");
             this.TcpClient.Client.Close();
             Instancias.Remove(this);
             if (Instancias.Count == 0)
                 sub.Abort();
         }
+
+
+
+        #region Miembros de IDisposable
+
+        public void Dispose()
+        {
+            this.Desconectar();
+        }
+
+        #endregion
     }
 }

@@ -36,10 +36,10 @@
             this.label3 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
-            this.numericUpDownEx3 = new System.Windows.Forms.NumericUpDownEx();
-            this.numericUpDownEx2 = new System.Windows.Forms.NumericUpDownEx();
-            this.numericUpDownEx1 = new System.Windows.Forms.NumericUpDownEx();
-            this.numericUpDownEx4 = new System.Windows.Forms.NumericUpDownEx();
+            this.numericUpDownEx3 = new System.Windows.Forms.NumericUpDown();
+            this.numericUpDownEx2 = new System.Windows.Forms.NumericUpDown();
+            this.numericUpDownEx1 = new System.Windows.Forms.NumericUpDown();
+            this.numericUpDownEx4 = new System.Windows.Forms.NumericUpDown();
             this.label7 = new System.Windows.Forms.Label();
             this.groupBox1.SuspendLayout();
             this.SuspendLayout();
@@ -176,7 +176,6 @@
             // SimularBatalla
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(563, 274);
             this.Controls.Add(this.numericUpDownEx4);
             this.Controls.Add(this.label7);
@@ -205,13 +204,13 @@
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.Label label4;
-        private System.Windows.Forms.NumericUpDownEx numericUpDownEx3;
+        private System.Windows.Forms.NumericUpDown numericUpDownEx3;
         private System.Windows.Forms.Label label3;
-        private System.Windows.Forms.NumericUpDownEx numericUpDownEx2;
-        private System.Windows.Forms.NumericUpDownEx numericUpDownEx1;
+        private System.Windows.Forms.NumericUpDown numericUpDownEx2;
+        private System.Windows.Forms.NumericUpDown numericUpDownEx1;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.NumericUpDownEx numericUpDownEx4;
+        private System.Windows.Forms.NumericUpDown numericUpDownEx4;
         private System.Windows.Forms.Label label7;
 
     }

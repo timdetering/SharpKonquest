@@ -16,6 +16,7 @@ Mensajes del protocolo SharpKonquest
 62 - Jugador sin planetas (Nombre de jugador)
 70 - Información de llegada de flota (planeta y naves)
 71 - Información de batalla (Destino,atacante,defensor,resultado,inicialesAtacante,inicialesDefensor,restantesAtacante,restantesDefensor)
+72 - Jugador retirado
 
 
 //Errores
@@ -31,9 +32,9 @@ Mensajes del protocolo SharpKonquest
 203 - Fin del turno del jugador
 204 - Fin del tiempo de turno
 205 - Envio de flota (naves,origen,destino)
-206 - Actualización de datos de planetas
-207 - Actualización de datos de flotas
+206 - Actualización de datos de partida
 208 - Información de jugador expulsado
+210 - Cargar parametros de partida (de administrador a servidor) (semilla,neutrales,ronda,datos)
 
 //Administracion del servidor
 300 - Establecer datos del mapa (Semilla y neutrales)

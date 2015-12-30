@@ -6,6 +6,7 @@ using System.Text.RegularExpressions;
 using System.Drawing;
 using SharpKonquest.Clases;
 using System.Threading;
+using System.TCP;
 
 namespace SharpKonquest
 {
@@ -39,14 +40,15 @@ namespace SharpKonquest
             Console.WriteLine("------>Esperando conexiones...");
            
             Mapa = new Mapa();
-            Mapa.Semilla = new Random().Next();
+            Mapa.ModoGrafico = false;
+            Mapa.Semilla = new Aleatorios().Next();
             Mapa.Neutrales = 10;
         }
 
         /// <summary>
         /// Envia datos a todos los clientes
         /// </summary>
-        public void DifundirMensaje(int comando, string texto)
+        public void DifundirMensaje(ushort comando, string texto)
         {
             Console.ForegroundColor = ConsoleColor.DarkGreen;
             Console.WriteLine("Servidor (difusión): " + comando + " " + texto);
@@ -59,7 +61,7 @@ namespace SharpKonquest
                 if (IdsClienteEnviadas.IndexOf(elemento.Value.IdCliente) == -1)
                 {
                     IdsClienteEnviadas.Add(elemento.Value.IdCliente);
-                    elemento.Key.EnviarDatos(comando, texto);
+                    elemento.Key.EnviarComando(comando, texto);
                 }
             }
         }
@@ -67,7 +69,7 @@ namespace SharpKonquest
         /// <summary>
         /// Envia datos a un cliente
         /// </summary>
-        public void EnviarComando(int comando, string texto, ClienteTCP cliente)
+        public void EnviarComando(ushort comando, string texto, ClienteTCP cliente)
         {
             if (Clientes.ContainsKey(cliente))
             {
@@ -81,14 +83,17 @@ namespace SharpKonquest
             else
                 Console.WriteLine("Servidor->Cliente: " + comando + " " + texto);
 
-            cliente.EnviarDatos(comando, texto);
+            cliente.EnviarComando(comando, texto);
         }
 
         /// <summary>
         /// Datos recibidos por cualquier cliente
         /// </summary>
-        void ComandoRecibido(int comando, string[] parametros, string cadena, ClienteTCP clienteTcp)
+        void ComandoRecibido(ushort comando, string[] parametros, string cadena, ClienteTCP clienteTcp)
         {
+            if (comando == 3)//Ping
+                return;
+
             if (Clientes.ContainsKey(clienteTcp))
             {
                 try
@@ -114,9 +119,6 @@ namespace SharpKonquest
             {
                 switch (comando)
                 {
-                    case 3://PING
-                        break;
-
                     case 10://Cliente conectado
                         if (AceptarNuevosJugadores == false)
                         {
@@ -124,7 +126,7 @@ namespace SharpKonquest
                             return;
                         }
 
-                        if (Programa.CompararVersiones(System.Windows.Forms.Application.ProductVersion, parametros[1]) > 0)
+                        if (Programa.CompararVersiones(System.InformacionPrograma.VersionActual, parametros[1]) > 0)
                         {
                             //Version cliente antigua
                             EnviarComando(103, "Versión antigua", clienteTcp);
@@ -136,7 +138,7 @@ namespace SharpKonquest
                         jugador.ClienteTcp = clienteTcp;
                         foreach (System.Collections.Generic.KeyValuePair<ClienteTCP, Cliente> elemento in Clientes)
                         {
-                            if (elemento.Value.Nombre == jugador.Nombre)//Nombre repetido
+                            if (string.Compare(elemento.Value.Nombre , jugador.Nombre,true)==0)//Nombre repetido
                             {
                                 EnviarComando(100, "Nombre repetido", clienteTcp);
                                 return;
@@ -162,11 +164,39 @@ namespace SharpKonquest
                         break;
                     case 11://Desconectado
                         if (Clientes.ContainsKey(clienteTcp))
-                            Clientes.Remove(clienteTcp);
+                        {
+                            if (Clientes.Count == 1)//Ultimo jugador desconectado
+                            {
+                                    Console.WriteLine("------>Ultimo jugador desconectado, cerrando servidor");
+                                    Programa.EstadoEspera.Set();
+                            }
+
+                            try
+                            {
+                                foreach (Planeta planeta in Mapa.Planetas)
+                                {
+                                    if (planeta.Dueño == Clientes[clienteTcp])
+                                        planeta.Dueño = null;
+                                }
+                            }
+                            catch { }
+                            DifundirMensaje(72, string.Format("El jugador '{0}' ha sido retirado de la partida.", Clientes[clienteTcp].Nombre));
+                            if (borrarFinTurno == null)
+                                borrarFinTurno = new List<Cliente>();
+                            borrarFinTurno.Add(Clientes[clienteTcp]);
+                            if (jugadorActual != null && jugadorActual == Clientes[clienteTcp])
+                            {
+                                //Acabar turno
+                                EsperandoFinTurno.Set();
+                            }
+                        }
                         break;
                     case 300://Informacion del mapa
                         if (EsAdministrador(clienteTcp))
                         {
+                            if (Mapa == null)
+                                Mapa = new Mapa();
+                            Mapa.ModoGrafico = false;
                             Mapa.Semilla = int.Parse(parametros[0]);
                             Mapa.Neutrales = int.Parse(parametros[1]);
                             Mapa.Inicializar(Mapa.Semilla, new List<Cliente>(ObtenerJugadores()), Mapa.Neutrales);
@@ -196,15 +226,27 @@ namespace SharpKonquest
                         {
                             foreach (System.Collections.Generic.KeyValuePair<ClienteTCP, Cliente> elemento in Clientes)
                             {
-                                if (elemento.Value.Nombre == parametros[0])
+                                if (string.Compare(elemento.Value.Nombre , parametros[0],true)==0)
                                 {
                                     Clientes.Remove(elemento.Key);
                                     ActualizarParametrosPartida();
                                     EnviarComando(11, "Adios", elemento.Key);
                                     elemento.Key.Desconectar();
+
+                                    if (elemento.Value.AdministradorServidor)//Buscar nuevo admin
+                                    {
+                                        foreach (System.Collections.Generic.KeyValuePair<ClienteTCP, Cliente> cliente in Clientes)
+                                        {
+                                            cliente.Value.AdministradorServidor = true;
+                                            EnviarComando(13, "Eres administrador", cliente.Key);
+                             
+                                            break;
+                                        }
+                                     }
                                     break;
                                 }
                             }
+                            ActualizarParametrosPartida();
                         }
                         break;
                     case 400://Chat de administrador
@@ -216,7 +258,7 @@ namespace SharpKonquest
                         {
                             if (elemento.Value.Nombre == parametros[0])
                             {
-                                elemento.Key.EnviarDatos(402, string.Format("El jugador '{0}' envia el mensaje \"'{1}'\" a '{2}'",Clientes[clienteTcp],parametros[1],parametros[0]));
+                                elemento.Key.EnviarComando(402, string.Format("El jugador '{0}' envia el mensaje \"'{1}'\" a '{2}'", Clientes[clienteTcp], parametros[1], parametros[0]));
                                 break;
                             }
                         }
@@ -268,6 +310,7 @@ namespace SharpKonquest
         #region Partida
         public int SegundosLimiteTurno = -1;
         int ronda = 1;
+        private List<Cliente> borrarFinTurno;
         /// <summary>
         /// Inicia la partida e indica al primer cliente que es su turno.
         /// </summary>
@@ -279,32 +322,65 @@ namespace SharpKonquest
 
             Mapa.Inicializar(Mapa.Semilla, new List<Cliente>(ObtenerJugadores()), Mapa.Neutrales);
 
-            System.Threading.Thread.Sleep(250);
-            /*
+            System.Threading.Thread.Sleep(50);
+            System.Windows.Forms.Application.DoEvents();
+            System.Threading.Thread.Sleep(50);
+            System.Windows.Forms.Application.DoEvents();
+            System.Threading.Thread.Sleep(50);
+            System.Windows.Forms.Application.DoEvents();
+            System.Threading.Thread.Sleep(50);
+            System.Windows.Forms.Application.DoEvents();
+            
             System.Threading.Thread sub = new System.Threading.Thread(new System.Threading.ThreadStart(ComprobacionConexion));
             sub.Name = "Ping a clientes";
-            sub.Start();
-             */
+            sub.Start();             
 
             ronda = 1;
             while (true)
             {
+            InicioRonda:
                 Console.WriteLine("------>Inicio de la ronda " + ronda);
                 DifundirMensaje(51, string.Format("Inicio de la ronda '{0}'", ronda));
 
                 foreach (System.Collections.Generic.KeyValuePair<ClienteTCP, Cliente> elemento in Clientes)
                 {
-                    if (elemento.Value.Derrotado || elemento.Value.PoseePlaneta == false)
-                        continue;
+                    try
+                    {
+                        if (elemento.Value.Derrotado || elemento.Value.PoseePlaneta == false)
+                            continue;
 
-                    RondaDeJugador(elemento.Value);
+                        if (borrarFinTurno != null && borrarFinTurno.Contains(elemento.Value))
+                            continue;
+
+                        RondaDeJugador(elemento.Value);
+
+                        if (iniciarRonda)//Se establece en true al cargar una partida
+                        {
+                            iniciarRonda = false;
+                            goto InicioRonda;
+                        }
+                    }
+                    catch (Exception e) { Console.WriteLine("Error: " + e.ToString()); }
+                }
+
+                if (borrarFinTurno != null && borrarFinTurno.Count > 0)
+                {
+                    try
+                    {
+                        foreach (Cliente jugadorDesconectado in borrarFinTurno)
+                        {
+                            if (Clientes.ContainsKey(jugadorDesconectado.ClienteTcp))
+                                Clientes.Remove(jugadorDesconectado.ClienteTcp);
+                        }
+                    }
+                    catch { }
                 }
 
                 //Procesar fin de turno
                 FinalRonda();
 
                 //Actualizar todos los clientes
-                ActualizarEstadoPartida();
+                DifundirMensaje(206, Mapa.GuardarDatos());
 
                 if (ComprobarCondicionesVictoria() == true)//Partida acabada
                     return;
@@ -314,53 +390,45 @@ namespace SharpKonquest
         }
 
         /// <summary>
-        /// Comprueba que los clientes siguen conectados
+        /// Mantiene las conexiones abiertas
         /// </summary>
         private void ComprobacionConexion()
         {
             System.Windows.Forms.Application.DoEvents();
-            System.Threading.Thread.Sleep(20 * 1000);
+            System.Threading.Thread.Sleep(30 * 1000);
             System.Windows.Forms.Application.DoEvents();
             foreach (System.Collections.Generic.KeyValuePair<ClienteTCP, Cliente> elemento in Clientes)
             {
                 if (elemento.Key.TcpClient.Connected)
-                    EnviarComando(2, "PING", elemento.Key);
+                    elemento.Key.EnviarComando(2, "PING");
+                else//Desconectado
+                    ComandoRecibido(11, null, null, elemento.Key);
             }
             ComprobacionConexion();
         }
 
+        private Cliente jugadorActual;
         private void RondaDeJugador(Cliente jugador)
         {
-            jugador.ClienteTcp.DatosRecibidos += DatosJugadorActualRecibidos;
+            jugadorActual = jugador;
+            jugador.ClienteTcp.DatosRecibidos += ComandoJugadorActualRecibidos;
 
-          timer = new Timer(new TimerCallback(Temporizador), jugador,0, 10000);
+            timer = new Timer(new TimerCallback(Temporizador), jugador, 0, 10000);
 
             EsperandoFinTurno = new AutoResetEvent(false);
             EsperandoFinTurno.WaitOne();
 
-            jugador.ClienteTcp.DatosRecibidos -= DatosJugadorActualRecibidos;
+            jugador.ClienteTcp.DatosRecibidos -= ComandoJugadorActualRecibidos;
+            jugadorActual = null;
         }
         private AutoResetEvent EsperandoFinTurno = new AutoResetEvent(false);
         private System.Threading.Timer timer;
-
-
-        /// <summary>
-        /// Envia periodicamente el comando de incio de turno
-        /// </summary>
-        void Temporizador(object objeto)
-        {
-            Cliente jugador = (Cliente)objeto;
-
-            if (SegundosLimiteTurno > 0)
-                DifundirMensaje(52, string.Format("Inicio del turno del jugador '{0}' de color '{1}'. Tiene '{2}' segundos para acabar.", jugador.Nombre, jugador.Color.ToArgb(), SegundosLimiteTurno));
-            else
-                DifundirMensaje(52, string.Format("Inicio del turno del jugador '{0}' de color '{1}'", jugador.Nombre, jugador.Color.ToArgb()));
-        }
+        private bool iniciarRonda = false;
 
         /// <summary>
         /// Datos recibidos del jugador que juega el turno actual
         /// </summary>
-        void DatosJugadorActualRecibidos(int comando, string[] subCadenas, string cadena, ClienteTCP cliente)
+        void ComandoJugadorActualRecibidos(ushort comando, string[] subCadenas, string cadena, ClienteTCP cliente)
         {
             switch (comando)
             {
@@ -385,12 +453,50 @@ namespace SharpKonquest
 
                     flota.Distancia = Cliente.CalcularDistancia(flota.Origen, flota.Destino);
                     flota.RondaSalida = ronda;
-                    flota.RondaLlegada = (ronda + (int)Math.Truncate(flota.Distancia));
+                    flota.RondaLlegada = (ronda + (int)Math.Round(flota.Distancia));
                     Clientes[cliente].Flotas.Add(flota);
 
                     EnviarComando(1, "OK", cliente);
                     break;
+
+                case 210://Cargar partida
+                    if (Clientes[cliente].AdministradorServidor)
+                    {
+                         ronda = int.Parse(subCadenas[2]);
+                        DifundirMensaje(comando, string.Format("Cargar mapa de semilla '{0}' y '{1}' neutrales",subCadenas[0],subCadenas[1]));
+                        Mapa.Inicializar(int.Parse(subCadenas[0]), Mapa.Jugadores, int.Parse(subCadenas[1]));
+                        Mapa.RondaActual = ronda;
+
+                        System.Windows.Forms.Application.DoEvents();
+                        System.Threading.Thread.Sleep(100);
+                         System.Windows.Forms.Application.DoEvents();
+
+                        string datos=subCadenas[3].Replace("&apos;", "'");
+                         DifundirMensaje(206,datos );
+                         Mapa.CargarDatos(ClienteTCP.ObtenerSubCadenas(datos));
+
+                         System.Windows.Forms.Application.DoEvents();
+                         System.Threading.Thread.Sleep(100);
+                         System.Windows.Forms.Application.DoEvents();
+
+                        iniciarRonda = true;
+                        EsperandoFinTurno.Set();
+                    }
+                    break;
             }
+        }
+
+        /// <summary>
+        /// Envia periodicamente el comando de incio de turno
+        /// </summary>
+        void Temporizador(object objeto)
+        {
+            Cliente jugador = (Cliente)objeto;
+
+            if (SegundosLimiteTurno > 0)
+                DifundirMensaje(52, string.Format("Inicio del turno del jugador '{0}' de color '{1}'. Tiene '{2}' segundos para acabar.", jugador.Nombre, jugador.Color.ToArgb(), SegundosLimiteTurno));
+            else
+                DifundirMensaje(52, string.Format("Inicio del turno del jugador '{0}' de color '{1}'", jugador.Nombre, jugador.Color.ToArgb()));
         }
 
         #region Final de ronda
@@ -461,7 +567,7 @@ namespace SharpKonquest
 
                     retorno.Distancia = Cliente.CalcularDistancia(retorno.Origen, retorno.Destino);
                     retorno.RondaSalida = ronda;
-                    retorno.RondaLlegada = (ronda + (int)Math.Truncate(retorno.Distancia));
+                    retorno.RondaLlegada = (ronda + (int)Math.Round(retorno.Distancia));
                     jugador.Flotas.Add(retorno);
                 }
             }
@@ -507,52 +613,19 @@ namespace SharpKonquest
             {
                 foreach (System.Collections.Generic.KeyValuePair<ClienteTCP, Cliente> elemento in Clientes)
                 {
-                    Cliente jugador = elemento.Value;
                     DifundirMensaje(60, string.Format("El jugador '{0}' ha ganado", elemento.Value.Nombre));
 
                     return true;
                 }
             }
+            if (jugadoresActivos == 0)
+                return true;
             return false;
         }
 
         #endregion
 
-        /// <summary>
-        /// Actualiza el estado de todos los clientes, planetas y flotas
-        /// </summary>
-        private void ActualizarEstadoPartida()
-        {
-            string mensaje = "Datos de los planetas: ";
 
-            foreach (System.Collections.Generic.KeyValuePair<string, Planeta> elemento in Mapa.Planetas)
-            {
-                Planeta planeta = elemento.Value;
-                mensaje += string.Format("(Planeta: '{0}', naves: '{1}', dueño: '{2}'); ", planeta.Name, planeta.Naves, planeta.Dueño == null ? string.Empty : planeta.Dueño.Nombre);
-            }
-
-            if (mensaje.EndsWith(", "))
-                mensaje = mensaje.Substring(0, mensaje.Length - 2);
-
-            DifundirMensaje(206, mensaje);
-
-            mensaje = "Datos de las flotas: ";
-
-            foreach (System.Collections.Generic.KeyValuePair<ClienteTCP, Cliente> elemento in Clientes)
-            {
-                Cliente jugador = elemento.Value;
-                foreach (Flota flota in jugador.Flotas)
-                {
-                    mensaje += string.Format("(Jugador: '{0}'; Naves: '{1}'; Tecnologia: '{2}'; Salida: '{3}'; Llegada: '{4}'; Origen: '{5}'; Destino: '{6}'), ",
-                        jugador.Nombre, flota.Naves, flota.TecnologiaMilitar, flota.RondaSalida, flota.RondaLlegada, flota.Origen.Name, flota.Destino.Name);
-                }
-            }
-
-            if (mensaje.EndsWith(", "))
-                mensaje = mensaje.Substring(0, mensaje.Length - 2);
-
-            DifundirMensaje(207, mensaje);
-        }
 
         #endregion
     }

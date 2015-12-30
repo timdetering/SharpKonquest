@@ -5,9 +5,12 @@ using System.Net;
 using System.Net.Sockets;
 using System.Windows.Forms;
 
-namespace SharpKonquest.Clases
+namespace System.TCP
 {
-   public class ServidorTCP
+    /// <summary>
+    /// Administra un servidor de conexiones TCP
+    /// </summary>
+    public class ServidorTCP
     {
         public event DelegadoComandoRecibido DatosRecibidos;
         public event DelegadoComandoRecibido ClienteConectado;
@@ -34,7 +37,7 @@ namespace SharpKonquest.Clases
 
         public ServidorTCP(int puerto)
         {
-            listener = new System.Net.Sockets.TcpListener(IPAddress.Any,puerto);
+            listener = new System.Net.Sockets.TcpListener(IPAddress.Any, puerto);
 
             //Esperar peticiones de conexión
             listener.Start();
@@ -55,10 +58,10 @@ namespace SharpKonquest.Clases
             {
                 try
                 {
-                    ClienteTCP nuevoCliente = new ClienteTCP(listener.EndAcceptTcpClient(ar),"Servidor");
+                    ClienteTCP nuevoCliente = new ClienteTCP(listener.EndAcceptTcpClient(ar), "Servidor");
                     clientes.Add(nuevoCliente);
 
-                    nuevoCliente.DatosRecibidos +=new DelegadoComandoRecibido(DatosClienteRecibidos);
+                    nuevoCliente.DatosRecibidos += new DelegadoComandoRecibido(DatosClienteRecibidos);
                     //Esperar más clientes
                     listener.BeginAcceptTcpClient(new AsyncCallback(ComprobarClienteConectado), null);
 
@@ -69,7 +72,7 @@ namespace SharpKonquest.Clases
             }
         }
 
-        internal static void InvocarEvento(Delegate evento,Control ControlInvoke,params object[] args)
+        internal static void InvocarEvento(Delegate evento, Control ControlInvoke, params object[] args)
         {
             if (evento != null)
             {
@@ -88,17 +91,15 @@ namespace SharpKonquest.Clases
         /// <summary>
         /// Envia datos a todos los clientes
         /// </summary>
-        /// <param name="buffer"></param>
-        public void EnviarDatos(int comando,string texto)
+        public void EnviarDatos(ushort comando, string texto)
         {
             if (clientes != null)
             {
-                //Enviar solo una vez por IP
                 foreach (ClienteTCP cliente in clientes)
                 {
                     try
                     {
-                            cliente.EnviarDatos(comando, texto);
+                        cliente.EnviarComando(comando, texto);
                     }
                     catch { }
                 }
@@ -108,10 +109,10 @@ namespace SharpKonquest.Clases
         /// <summary>
         /// Datos de cualquier cliente recibidos
         /// </summary>
-        void DatosClienteRecibidos(int comando, string[] parametros, string cadena, ClienteTCP cliente)
+        void DatosClienteRecibidos(ushort comando, string[] parametros, string cadena, ClienteTCP cliente)
         {
             if (DatosRecibidos != null)
-                InvocarEvento(DatosRecibidos, this.ControlInvoke, comando,parametros,cadena,cliente);
+                InvocarEvento(DatosRecibidos, this.ControlInvoke, comando, parametros, cadena, cliente);
         }
 
         /// <summary>

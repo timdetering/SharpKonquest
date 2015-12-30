@@ -150,8 +150,7 @@ namespace Actualizador
                             MemoryStream res = new MemoryStream(lector.ReadBytes(tamaño));
                             FileStream destino = new FileStream(rutaDestino, FileMode.Create,FileAccess.Write);
 
-                            LZMA lzma = new LZMA();
-                            lzma.Decompress(res, destino);
+                            LZMA.Decompress(res, destino);
 
                             destino.Close();
                             res.Close();

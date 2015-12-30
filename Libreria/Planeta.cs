@@ -24,17 +24,15 @@ namespace SharpKonquest
 
         public Planeta(string nombre,Cliente jugador,int tecno,int produccion,int imagen)
         {
-
             string[] imagenes = System.IO.Directory.GetFiles(Application.StartupPath, "*.jpg", System.IO.SearchOption.AllDirectories);
 
             if (imagenes.Length >0)
             this.Imagen = Image.FromFile(imagenes[imagen % imagenes.Length]);
 
+        this.SetStyle(ControlStyles.SupportsTransparentBackColor, true);
+        this.BackColor = Color.Transparent;
 
-            this.Paint += new PaintEventHandler(Dibujar);
-            this.Name = nombre;           
-
-            this.Dock = DockStyle.Fill;
+            this.Name = nombre;          
 
             Dueño = jugador;
 
@@ -51,15 +49,6 @@ namespace SharpKonquest
                 Produccion = produccion;
                 Naves = Produccion;
             }
-        }
-
-        void Dibujar(object sender, PaintEventArgs e)
-        {
-            e.Graphics.DrawImage(Imagen, this.DisplayRectangle);
-
-            StringFormat formatoTexto = new StringFormat();    
-            formatoTexto.LineAlignment = StringAlignment.Far;
-            e.Graphics.DrawString(this.Name, this.Font, new SolidBrush(Color.Red), this.DisplayRectangle, formatoTexto);
         }
 
         public int Columna

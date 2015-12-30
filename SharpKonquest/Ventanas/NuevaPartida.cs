@@ -6,10 +6,11 @@ using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
 using SharpKonquest.Clases;
+using System.TCP;
 
 namespace SharpKonquest
 {
-    partial class NuevaPartida : Form
+    partial class NuevaPartida : GlassForm
     {
         public List<Cliente> clientes=new List<Cliente>();
         Principal vPrincipal;
@@ -20,12 +21,14 @@ namespace SharpKonquest
             this.Icon = Icon.ExtractAssociatedIcon(Application.ExecutablePath);
             semillaAleatoria.PerformClick();
 
+            semillaMapa.Maximum = int.MaxValue;
+
             vPrincipal = ventanaPrincipal;
         }
 
         private void MapaAleatorio(object sender, EventArgs e)
         {
-            System.Random r = new Random();
+            Aleatorios r = new Aleatorios();
             semillaMapa.Value = r.Next(0, int.MaxValue);
         }
 
@@ -36,12 +39,13 @@ namespace SharpKonquest
                 return;
             
             mapa.Jugadores.Clear();
-            foreach (IconListBoxItem item in listaJugadores.Items)
+            foreach (ItemLista item in listaJugadores.Items)
             {
-                    mapa.Jugadores.Add((Cliente)item.Tag);
+                    mapa.Jugadores.Add(item.Tag);
             }
 
             mapa.Inicializar((int)semillaMapa.Value, mapa.Jugadores, (int)neutrales.Value);
+            mapa.Invalidate();
             
             ActualizarDatosMapaServidor();
         }
@@ -49,12 +53,12 @@ namespace SharpKonquest
         private void ActualizarDatosMapaServidor()
         {
             if (clientes.Count > 0)
-                clientes[0].ClienteTcp.EnviarDatos(300, string.Format("La semilla del mapa es '{0}' y los planetas neutrales son '{1}'", semillaMapa.Value, neutrales.Value));
+                clientes[0].ClienteTcp.EnviarComando(300, string.Format("La semilla del mapa es '{0}' y los planetas neutrales son '{1}'", semillaMapa.Value, neutrales.Value));
         }
 
 
 
-        void ComandoRecibido(int comando, string[] parametros, string cadena, ClienteTCP clienteTcp)
+        void ComandoRecibido(ushort comando, string[] parametros, string cadena, ClienteTCP clienteTcp)
         {
             switch (comando)
             {
@@ -122,11 +126,11 @@ namespace SharpKonquest
                             clientes.Remove(jugadorLocal);
                             try
                             {
-                                foreach (IconListBoxItem item in listaJugadores.Items)
+                                foreach (ItemLista item in listaJugadores.Items)
                                 {
-                                    if (((Cliente)item.Tag).Nombre == jugadorLocal.Nombre)
+                                    if (string.Compare(item.Tag.Nombre ,jugadorLocal.Nombre,true)==0)
                                     {
-                                        listaJugadores.RemoveItem(item);
+                                        listaJugadores.Items.Remove(item);
                                         break;
                                     }
                                 }
@@ -157,7 +161,7 @@ namespace SharpKonquest
                     if ((parametros.Length - 2) / 2 != listaJugadores.Items.Count)//Jugadores añadidos
                     {
                         cambiado = true;
-                        listaJugadores.Clear();
+                        listaJugadores.Items.Clear();
 
                         listaClientes = new List<Cliente>();
                         for (int contador = 2; contador < parametros.Length; contador += 3)
@@ -198,15 +202,13 @@ namespace SharpKonquest
         public System.Diagnostics.Process procesoServidor;
         private void bConectar_Click(object sender, EventArgs e)
         {
-            if ((host.Text == "localhost" || host.Text == "127.0.0.1") && ServidorActivo==false)
+            if (host.Text == "localhost" || host.Text == "127.0.0.1")
             {
                 try
                 {
                     //Comprobar puerto escucha
-                    System.Net.Sockets.TcpListener listener = new System.Net.Sockets.TcpListener(System.Net.IPAddress.Parse("127.0.0.1"), 4444);
-                    listener.Start();
-                    listener.Stop();
-                    System.Windows.Forms.Application.DoEvents();
+                        ServidorTCP servidorTCP = new ServidorTCP(4444);
+                        servidorTCP.Desactivar();
 
                     //Iniciar servidor
                     System.Diagnostics.ProcessStartInfo servidor = new System.Diagnostics.ProcessStartInfo(System.IO.Path.Combine(Application.StartupPath, "Servidor.exe"));
@@ -220,7 +222,6 @@ namespace SharpKonquest
                     System.Windows.Forms.Application.DoEvents();
                 }
                 catch { ServidorActivo = true; }
-
             }
             try
             {
@@ -231,7 +232,7 @@ namespace SharpKonquest
 
                 clientes.Add(cliente);
                 cliente.ClienteTcp.DatosRecibidos += ComandoRecibido;
-                cliente.Conectar(Programa.IdCliente, Application.ProductVersion);
+                cliente.Conectar(Programa.IdCliente, System.InformacionPrograma.VersionActual);
             }
             catch (System.Net.Sockets.SocketException error)
             {
@@ -239,38 +240,44 @@ namespace SharpKonquest
             }
         }
 
+        public class ItemLista
+        {
+            public string Text;
+            public Color Color;
+            public Cliente Tag;
+            public string SubText;
+        }
+
         void JugadorConectado(Cliente nuevoCliente)
         {
-            IconListBoxItem item = new IconListBoxItem();
+            ItemLista item = new ItemLista();
             item.Text = nuevoCliente.Nombre;
-            item.ForeColor = nuevoCliente.Color;
+            item.Color = nuevoCliente.Color;
             item.Tag = nuevoCliente;
-            listaJugadores.AddItem(item);
+            listaJugadores.Items.Add(item);
             if (nuevoCliente.AdministradorServidor)
             {
-                LinkLabel link = new LinkLabel();
-                link.Text = "*";
-                item.AddLinkLabel(link);
-                toolTip1.SetToolTip(link, "Este jugador es el administrador de la partida");
+                item.SubText="  (Administrador)";
+               //  item.ToolTipText = "Este jugador es el administrador de la partida";
             }
             SemillaMapa(null, null);//Actualizar el mapa
         }
 
         private void ExpulsarJugador(object sender, EventArgs e)
         {
-            if (listaJugadores.SelectedItem == null)
+            if (listaJugadores.SelectedItems.Count == 0)
                 return;
 
-            IconListBoxItem item = listaJugadores.SelectedItem;
+            ItemLista item = (ItemLista)listaJugadores.SelectedItems[0];
 
             if (clientes.Count > 0)
-                clientes[0].ClienteTcp.EnviarDatos(304,string.Format( "Expulsar al jugador '{0}'",((Cliente)item.Tag).Nombre));
+                clientes[0].ClienteTcp.EnviarComando(304, string.Format("Expulsar al jugador '{0}'", ((Cliente)item.Tag).Nombre));
         }
 
         private void ComenzarPartida(object sender, EventArgs e)
         {
                 if (clientes.Count > 0)
-                    clientes[0].ClienteTcp.EnviarDatos(301, "Iniciar partida");
+                    clientes[0].ClienteTcp.EnviarComando(301, "Iniciar partida");
         }
 
         private void NuevaPartida_FormClosing(object sender, FormClosingEventArgs e)
@@ -282,7 +289,7 @@ namespace SharpKonquest
                     foreach (Cliente cliente in clientes)
                     {
                         if(cliente.AdministradorServidor)
-                            cliente.ClienteTcp.EnviarDatos(302, "Salir del servidor");
+                            cliente.ClienteTcp.EnviarComando(302, "Salir del servidor");
 
                         cliente.ClienteTcp.Desconectar();
                     }
@@ -291,6 +298,103 @@ namespace SharpKonquest
                     System.GC.Collect();
                 }
                 catch { }
+            }
+        }
+
+        private void listBox1_DrawItem(object sender, DrawItemEventArgs e)
+        {
+            if (e.Index < 0)
+                return;
+            ItemLista item = (ItemLista)listaJugadores.Items[e.Index];
+
+            e.DrawBackground();
+
+            string texto;
+            if (string.IsNullOrEmpty(item.SubText))
+                texto = item.Text;
+            else
+                texto = item.Text + " " + item.SubText;
+
+            StringFormat format = StringFormat.GenericDefault;
+            format.LineAlignment = StringAlignment.Center;
+
+            e.Graphics.DrawString(texto, this.Font, new SolidBrush(item.Color), e.Bounds, format);
+
+            e.DrawFocusRectangle();
+        }
+
+        private void button1_Click_1(object sender, EventArgs e)
+        {
+            if (mapa.Jugadores.Count < 2)
+            {
+                semillaMapa.Value = new Random().Next();
+                return;
+            }
+            Mapa mapaTemporal = new Mapa();
+            mapaTemporal.ModoGrafico = false;
+            System.Random rand = new Random();
+
+            List<double> distancias = new List<double>(this.mapa.Jugadores.Count);
+            List<int> cercanos = new List<int>(this.mapa.Jugadores.Count);
+            int contador = 0;
+            while (true)
+            {
+                distancias.Clear();
+                cercanos.Clear();
+                mapaTemporal.Inicializar(rand.Next(), this.mapa.Jugadores, (int)neutrales.Value);
+
+                foreach (Cliente jugador in this.mapa.Jugadores)
+                {
+                    int cercano = 0;
+                    double distanciaMedia = 0;
+
+                    foreach (Planeta planetaJugador in jugador.ObtenerPlanetas(mapaTemporal))
+                    {
+                        double distanciasMediaPlaneta = 0;
+                        foreach (Planeta planeta in mapaTemporal.Planetas)
+                        {
+                            double distancia = Cliente.CalcularDistancia(planetaJugador, planeta);
+
+                            if (distancia <=1.5)
+                                cercano++;
+                            distanciasMediaPlaneta += distancia;
+                        }
+
+                        distanciaMedia += distanciasMediaPlaneta / mapaTemporal.Planetas.Count;                      
+                    }
+                    distancias.Add(distanciaMedia);
+                    cercanos.Add(cercano);
+                }
+
+                double anterior=-1;
+                bool mapaValido=true;
+                foreach (double distancia in distancias)
+                {
+                    if (anterior != -1 && Math.Abs(anterior - distancia) > 0.3)
+                    {
+                        mapaValido = false;
+                        break;
+                    }
+                    anterior = distancia;
+                }
+                anterior = -1;
+                foreach (int cercano in cercanos)
+                {
+                    if (anterior != -1 && Math.Abs(anterior - cercano)>1)
+                    {
+                        mapaValido = false;
+                        break;
+                    }
+                    anterior = cercano;
+                }
+
+                if (mapaValido || contador>1000)
+                {
+                    semillaMapa.Value = mapaTemporal.Semilla;
+                    return;
+                }
+
+                contador++;
             }
         }
     }

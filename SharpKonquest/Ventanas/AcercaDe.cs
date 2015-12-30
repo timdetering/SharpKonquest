@@ -8,14 +8,15 @@ using System.Windows.Forms;
 
 namespace SharpKonquest.Ventanas
 {
-    public partial class AcercaDe : Form
+    public partial class AcercaDe : GlassForm
     {
         public AcercaDe()
         {
             InitializeComponent();
-            label2.Text = "Versión " + Application.ProductVersion;
+            label2.Text = "Versión " + System.InformacionPrograma.VersionActual;
             this.Icon = Icon.ExtractAssociatedIcon(Application.ExecutablePath);
-
+            
+            this.pictureBox1.Image = Programa.ObtenerImagenIncrustada("logo");
         }
 
         private void button1_Click(object sender, EventArgs e)

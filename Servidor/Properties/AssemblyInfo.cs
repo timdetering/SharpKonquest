@@ -5,7 +5,11 @@ using System.Runtime.InteropServices;
 // La información general sobre un ensamblado se controla mediante el siguiente 
 // conjunto de atributos. Cambie estos atributos para modificar la información
 // asociada con un ensamblado.
-[assembly: AssemblyTitle("Servidor SharpKonquest 2.0")]
+#if MONO
+[assembly: AssemblyTitle("Servidor SharpKonquest 2.1 Mono Version")]
+#else
+[assembly: AssemblyTitle("Servidor SharpKonquest 2.1")]
+#endif
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyProduct("SharpKonquest")]

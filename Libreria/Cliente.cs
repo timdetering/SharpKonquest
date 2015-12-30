@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Drawing;
 using System.Windows.Forms;
+using System.TCP;
 
 namespace SharpKonquest.Clases
 {
@@ -44,7 +45,7 @@ namespace SharpKonquest.Clases
         public List<Planeta> ObtenerPlanetas(Mapa mapa)
         {
             List<Planeta> res = new List<Planeta>();
-            foreach (Planeta p in mapa.Planetas.Values)
+            foreach (Planeta p in mapa.Planetas)
             {
                 if (p.Dueño == this)
                     res.Add(p);
@@ -57,7 +58,7 @@ namespace SharpKonquest.Clases
         /// </summary>
         public void Conectar(int IdCliente,string versionCliente)
         {
-            ClienteTcp.EnviarDatos(10,string.Format("Hola, mi ID de cliente es '{0}' y la versión es '{1}'. Mi nombres es '{2}', mi color es '{3}'",
+            ClienteTcp.EnviarComando(10,string.Format("Hola, mi ID de cliente es '{0}' y la versión es '{1}'. Mi nombres es '{2}', mi color es '{3}'",
                 IdCliente, versionCliente, Nombre, Color.ToArgb()));
         }
 
@@ -66,7 +67,7 @@ namespace SharpKonquest.Clases
         /// </summary>
         public void FinTurno()
         {
-            ClienteTcp.EnviarDatos(203,"He acabado el turno");
+            ClienteTcp.EnviarComando(203, "He acabado el turno");
         }
 
 
@@ -89,11 +90,11 @@ namespace SharpKonquest.Clases
 
                 flota.Distancia = Cliente.CalcularDistancia(origen, destino);
                 flota.RondaSalida = rondaActual;
-                flota.RondaLlegada = (rondaActual + (int)Math.Truncate(flota.Distancia));
+                flota.RondaLlegada = (rondaActual + (int)Math.Round(flota.Distancia));
 
                 origen.Dueño.Flotas.Add(flota);
 
-                origen.Dueño.ClienteTcp.EnviarDatos(205,
+                origen.Dueño.ClienteTcp.EnviarComando(205,
                     string.Format("He enviado '{0}' naves desde '{1}' hasta '{2}'. La distancia es de '{3}' y la tecnologia militar es '{4}'",
                     naves, origen.Name, destino.Name, flota.Distancia, flota.TecnologiaMilitar));
             }
@@ -110,7 +111,7 @@ namespace SharpKonquest.Clases
             distancia = distancia / 2;
 
             if (distancia < 1)
-                distancia += 1;
+                distancia = 1;
             return distancia;
         }
     }

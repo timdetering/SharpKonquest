@@ -36,14 +36,15 @@
             this.label4 = new System.Windows.Forms.Label();
             this.linkLabel2 = new System.Windows.Forms.LinkLabel();
             this.linkLabel3 = new System.Windows.Forms.LinkLabel();
-            this.reflectionPicture1 = new System.Windows.FutureStyle.ReflectionPicture();
+            this.pictureBox1 = new System.Windows.Forms.PictureBox();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
             // 
             // label1
             // 
             this.label1.AutoSize = true;
             this.label1.Font = new System.Drawing.Font("Tahoma", 26.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label1.Location = new System.Drawing.Point(241, 26);
+            this.label1.Location = new System.Drawing.Point(269, 26);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(286, 42);
             this.label1.TabIndex = 1;
@@ -53,7 +54,7 @@
             // 
             this.label2.AutoSize = true;
             this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label2.Location = new System.Drawing.Point(237, 79);
+            this.label2.Location = new System.Drawing.Point(265, 79);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(70, 20);
             this.label2.TabIndex = 2;
@@ -62,7 +63,7 @@
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(241, 128);
+            this.label3.Location = new System.Drawing.Point(269, 128);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(156, 13);
             this.label3.TabIndex = 3;
@@ -70,7 +71,7 @@
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(318, 245);
+            this.button1.Location = new System.Drawing.Point(346, 245);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(75, 23);
             this.button1.TabIndex = 4;
@@ -81,7 +82,7 @@
             // linkLabel1
             // 
             this.linkLabel1.AutoSize = true;
-            this.linkLabel1.Location = new System.Drawing.Point(427, 128);
+            this.linkLabel1.Location = new System.Drawing.Point(455, 128);
             this.linkLabel1.Name = "linkLabel1";
             this.linkLabel1.Size = new System.Drawing.Size(125, 13);
             this.linkLabel1.TabIndex = 5;
@@ -91,7 +92,7 @@
             // 
             // label4
             // 
-            this.label4.Location = new System.Drawing.Point(244, 151);
+            this.label4.Location = new System.Drawing.Point(272, 151);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(308, 20);
             this.label4.TabIndex = 6;
@@ -99,7 +100,7 @@
             // 
             // linkLabel2
             // 
-            this.linkLabel2.Location = new System.Drawing.Point(256, 175);
+            this.linkLabel2.Location = new System.Drawing.Point(284, 178);
             this.linkLabel2.Name = "linkLabel2";
             this.linkLabel2.Size = new System.Drawing.Size(296, 18);
             this.linkLabel2.TabIndex = 7;
@@ -110,7 +111,7 @@
             // 
             // linkLabel3
             // 
-            this.linkLabel3.Location = new System.Drawing.Point(256, 195);
+            this.linkLabel3.Location = new System.Drawing.Point(284, 203);
             this.linkLabel3.Name = "linkLabel3";
             this.linkLabel3.Size = new System.Drawing.Size(271, 18);
             this.linkLabel3.TabIndex = 8;
@@ -119,22 +120,18 @@
             this.linkLabel3.Text = "Office 2007 ToolStripRenderer de  Phil. Wright";
             this.linkLabel3.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkLabel2_LinkClicked);
             // 
-            // reflectionPicture1
+            // pictureBox1
             // 
-            this.reflectionPicture1.AjustSize = true;
-            this.reflectionPicture1.Image = global::SharpKonquest.Properties.Resources.logo;
-            this.reflectionPicture1.Location = new System.Drawing.Point(24, 0);
-            this.reflectionPicture1.Name = "reflectionPicture1";
-            this.reflectionPicture1.OpacityIndex = ((byte)(125));
-            this.reflectionPicture1.ReflectDistance = -10;
-            this.reflectionPicture1.Size = new System.Drawing.Size(193, 318);
-            this.reflectionPicture1.TabIndex = 0;
+            this.pictureBox1.Location = new System.Drawing.Point(3, 7);
+            this.pictureBox1.Name = "pictureBox1";
+            this.pictureBox1.Size = new System.Drawing.Size(256, 256);
+            this.pictureBox1.TabIndex = 9;
+            this.pictureBox1.TabStop = false;
             // 
             // AcercaDe
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(564, 275);
+            this.ClientSize = new System.Drawing.Size(588, 275);
+            this.Controls.Add(this.pictureBox1);
             this.Controls.Add(this.linkLabel3);
             this.Controls.Add(this.linkLabel2);
             this.Controls.Add(this.label4);
@@ -143,10 +140,11 @@
             this.Controls.Add(this.label3);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
-            this.Controls.Add(this.reflectionPicture1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.Fixed3D;
+            this.Location = new System.Drawing.Point(0, 0);
             this.Name = "AcercaDe";
             this.Text = "AcercaDe";
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -154,7 +152,6 @@
 
         #endregion
 
-        private System.Windows.FutureStyle.ReflectionPicture reflectionPicture1;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label3;
@@ -163,5 +160,6 @@
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.LinkLabel linkLabel2;
         private System.Windows.Forms.LinkLabel linkLabel3;
+        private System.Windows.Forms.PictureBox pictureBox1;
     }
 }

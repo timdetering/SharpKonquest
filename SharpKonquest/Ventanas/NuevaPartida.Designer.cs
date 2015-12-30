@@ -42,14 +42,15 @@
             this.colorDialog1 = new System.Windows.Forms.ColorDialog();
             this.IniciarPartida = new System.Windows.Forms.Button();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
-            this.nombreJugador = new System.Windows.Forms.XPTextBox();
-            this.host = new System.Windows.Forms.XPTextBox();
+            this.nombreJugador = new System.Windows.Forms.TextBox();
+            this.host = new System.Windows.Forms.TextBox();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.listaJugadores = new System.Windows.Forms.ListBox();
             this.semillaMapa = new System.Windows.Forms.NumericUpDown();
             this.neutrales = new System.Windows.Forms.NumericUpDown();
-            this.listaJugadores = new System.Windows.Forms.IconListBox();
             this.mapa = new SharpKonquest.Clases.Mapa();
+            this.button1 = new System.Windows.Forms.Button();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.semillaMapa)).BeginInit();
@@ -60,7 +61,7 @@
             // 
             this.label3.AutoSize = true;
             this.label3.BackColor = System.Drawing.Color.Transparent;
-            this.label3.Location = new System.Drawing.Point(9, 193);
+            this.label3.Location = new System.Drawing.Point(9, 190);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(97, 13);
             this.label3.TabIndex = 21;
@@ -68,7 +69,7 @@
             // 
             // semillaAleatoria
             // 
-            this.semillaAleatoria.Location = new System.Drawing.Point(135, 256);
+            this.semillaAleatoria.Location = new System.Drawing.Point(135, 234);
             this.semillaAleatoria.Name = "semillaAleatoria";
             this.semillaAleatoria.Size = new System.Drawing.Size(71, 23);
             this.semillaAleatoria.TabIndex = 19;
@@ -80,7 +81,7 @@
             // 
             this.label2.AutoSize = true;
             this.label2.BackColor = System.Drawing.Color.Transparent;
-            this.label2.Location = new System.Drawing.Point(9, 238);
+            this.label2.Location = new System.Drawing.Point(9, 239);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(37, 13);
             this.label2.TabIndex = 18;
@@ -170,40 +171,24 @@
             // 
             // nombreJugador
             // 
-            this.nombreJugador.AcceptsReturn = false;
-            this.nombreJugador.AcceptsTab = false;
-            this.nombreJugador.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.None;
-            this.nombreJugador.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.None;
             this.nombreJugador.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.nombreJugador.Location = new System.Drawing.Point(61, 47);
-            this.nombreJugador.MaxLength = 32767;
             this.nombreJugador.Name = "nombreJugador";
-            this.nombreJugador.ReadOnly = false;
-            this.nombreJugador.ScrollBars = System.Windows.Forms.ScrollBars.None;
-            this.nombreJugador.Size = new System.Drawing.Size(128, 23);
+            this.nombreJugador.Size = new System.Drawing.Size(128, 20);
             this.nombreJugador.TabIndex = 28;
             this.nombreJugador.Text = "Jugador 1";
             this.toolTip1.SetToolTip(this.nombreJugador, "Nombre del jugador que se va a añadir");
-            this.nombreJugador.UseSystemPasswordChar = false;
             // 
             // host
             // 
-            this.host.AcceptsReturn = false;
-            this.host.AcceptsTab = false;
-            this.host.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.None;
-            this.host.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.None;
             this.host.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.host.Location = new System.Drawing.Point(61, 20);
-            this.host.MaxLength = 32767;
             this.host.Name = "host";
-            this.host.ReadOnly = false;
-            this.host.ScrollBars = System.Windows.Forms.ScrollBars.None;
-            this.host.Size = new System.Drawing.Size(128, 23);
+            this.host.Size = new System.Drawing.Size(128, 20);
             this.host.TabIndex = 26;
             this.host.Text = "localhost";
             this.toolTip1.SetToolTip(this.host, "Host de la partida. Si vas a jugar en el mismo ordenador, establece como host el " +
                     "nombre \"localhost\"");
-            this.host.UseSystemPasswordChar = false;
             // 
             // groupBox1
             // 
@@ -223,11 +208,12 @@
             // 
             // groupBox2
             // 
+            this.groupBox2.Controls.Add(this.button1);
+            this.groupBox2.Controls.Add(this.listaJugadores);
             this.groupBox2.Controls.Add(this.semillaMapa);
             this.groupBox2.Controls.Add(this.neutrales);
             this.groupBox2.Controls.Add(this.IniciarPartida);
             this.groupBox2.Controls.Add(this.label1);
-            this.groupBox2.Controls.Add(this.listaJugadores);
             this.groupBox2.Controls.Add(this.bBorrarJugador);
             this.groupBox2.Controls.Add(this.label3);
             this.groupBox2.Controls.Add(this.semillaAleatoria);
@@ -239,9 +225,21 @@
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Crear nueva partida";
             // 
+            // listaJugadores
+            // 
+            this.listaJugadores.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
+            this.listaJugadores.FormattingEnabled = true;
+            this.listaJugadores.ItemHeight = 20;
+            this.listaJugadores.Location = new System.Drawing.Point(6, 38);
+            this.listaJugadores.Name = "listaJugadores";
+            this.listaJugadores.Size = new System.Drawing.Size(200, 144);
+            this.listaJugadores.TabIndex = 25;
+            this.listaJugadores.TabStop = false;
+            this.listaJugadores.DrawItem += new System.Windows.Forms.DrawItemEventHandler(this.listBox1_DrawItem);
+            // 
             // semillaMapa
             // 
-            this.semillaMapa.Location = new System.Drawing.Point(12, 257);
+            this.semillaMapa.Location = new System.Drawing.Point(12, 258);
             this.semillaMapa.Maximum = new decimal(new int[] {
             1569325055,
             23283064,
@@ -254,7 +252,7 @@
             // 
             // neutrales
             // 
-            this.neutrales.Location = new System.Drawing.Point(12, 213);
+            this.neutrales.Location = new System.Drawing.Point(12, 210);
             this.neutrales.Maximum = new decimal(new int[] {
             120,
             0,
@@ -270,37 +268,32 @@
             0});
             this.neutrales.ValueChanged += new System.EventHandler(this.SemillaMapa);
             // 
-            // listaJugadores
-            // 
-            this.listaJugadores.AutoScroll = true;
-            this.listaJugadores.BorderBottom = 8;
-            this.listaJugadores.BorderLeft = 13;
-            this.listaJugadores.BorderRight = 13;
-            this.listaJugadores.BorderTop = 8;
-            this.listaJugadores.ImageSize = new System.Drawing.Size(32, 32);
-            this.listaJugadores.ItemHeight = 25;
-            this.listaJugadores.Location = new System.Drawing.Point(9, 39);
-            this.listaJugadores.Name = "listaJugadores";
-            this.listaJugadores.ProgressBarHeight = 13;
-            this.listaJugadores.SelectedIndex = -1;
-            this.listaJugadores.SelectedItem = null;
-            this.listaJugadores.Size = new System.Drawing.Size(197, 146);
-            this.listaJugadores.TabIndex = 12;
-            // 
             // mapa
             // 
             this.mapa.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.mapa.BackColor = System.Drawing.Color.Black;
+            this.mapa.BackColor = System.Drawing.Color.Transparent;
+            this.mapa.ColorFondoCeldas = System.Drawing.Color.Black;
             this.mapa.Font = new System.Drawing.Font("Tahoma", 10F, System.Drawing.FontStyle.Bold);
+            this.mapa.ImagenFondo = null;
             this.mapa.Location = new System.Drawing.Point(231, 13);
             this.mapa.Margin = new System.Windows.Forms.Padding(4);
             this.mapa.Name = "mapa";
-            this.mapa.Size = new System.Drawing.Size(458, 459);
+            this.mapa.Size = new System.Drawing.Size(450, 450);
             this.mapa.TabIndex = 0;
+            // 
+            // button1
+            // 
+            this.button1.Location = new System.Drawing.Point(135, 261);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(71, 23);
+            this.button1.TabIndex = 26;
+            this.button1.Text = "Equilibrado";
+            this.toolTip1.SetToolTip(this.button1, "Busca un mapa con iguales condiciones para todos los jugadores");
+            this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.button1_Click_1);
             // 
             // NuevaPartida
             // 
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
             this.ClientSize = new System.Drawing.Size(702, 481);
             this.Controls.Add(this.mapa);
             this.Controls.Add(this.groupBox2);
@@ -329,12 +322,11 @@
         private System.Windows.Forms.Button bBorrarJugador;
         private System.Windows.Forms.Button bConectar;
         private System.Windows.Forms.Label label1;
-        public System.Windows.Forms.IconListBox listaJugadores;
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.Label label4;
-        private System.Windows.Forms.XPTextBox nombreJugador;
+        private System.Windows.Forms.TextBox nombreJugador;
         private System.Windows.Forms.Label label6;
-        private System.Windows.Forms.XPTextBox host;
+        private System.Windows.Forms.TextBox host;
         private System.Windows.Forms.ColorDialog colorDialog1;
         private System.Windows.Forms.Control color;
         private System.Windows.Forms.Button IniciarPartida;
@@ -344,5 +336,7 @@
         public System.Windows.Forms.NumericUpDown neutrales;
         public System.Windows.Forms.NumericUpDown semillaMapa;
         public SharpKonquest.Clases.Mapa mapa;
+        public System.Windows.Forms.ListBox listaJugadores;
+        private System.Windows.Forms.Button button1;
     }
 }

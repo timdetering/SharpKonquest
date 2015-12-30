@@ -81,7 +81,6 @@ namespace System.Windows.FutureStyle.Office2007
         #region Static Colors
         private static Color _c1 = Color.FromArgb(167, 167, 167);
         private static Color _c2 = Color.FromArgb(21, 66, 139);
-        private static Color _c3 = Color.FromArgb(76, 83, 92);
         private static Color _c4 = Color.FromArgb(250, 250, 250);
         private static Color _c5 = Color.FromArgb(248, 248, 248);
         private static Color _c6 = Color.FromArgb(243, 243, 243);
@@ -95,8 +94,6 @@ namespace System.Windows.FutureStyle.Office2007
         private static Color _r8 = Color.FromArgb(255, 228, 145);
         private static Color _r9 = Color.FromArgb(160, 188, 228);
         private static Color _rA = Color.FromArgb(121, 153, 194);
-        private static Color _rB = Color.FromArgb(182, 190, 192);
-        private static Color _rC = Color.FromArgb(155, 163, 167);
         private static Color _rD = Color.FromArgb(233, 168, 97);
         private static Color _rE = Color.FromArgb(247, 164, 39);
         private static Color _rF = Color.FromArgb(246, 156, 24);
@@ -331,11 +328,6 @@ namespace System.Windows.FutureStyle.Office2007
         /// <param name="e">An ToolStripItemTextRenderEventArgs containing the event data.</param>
         protected override void OnRenderItemText(ToolStripItemTextRenderEventArgs e)
         {
-            if ((e.ToolStrip is MenuStrip) ||
-                (e.ToolStrip is ToolStrip) ||
-                (e.ToolStrip is ContextMenuStrip) ||
-                (e.ToolStrip is ToolStripDropDownMenu))
-            {
                 // We set the color depending on the enabled state
                 if (!e.Item.Enabled)
                     e.TextColor = _textDisabled;
@@ -352,11 +344,6 @@ namespace System.Windows.FutureStyle.Office2007
                 // All text is draw using the ClearTypeGridFit text rendering hint
                 using (UseClearTypeGridFit clearTypeGridFit = new UseClearTypeGridFit(e.Graphics))
                     base.OnRenderItemText(e);
-            }
-            else
-            {
-                base.OnRenderItemText(e);
-            }
         }
         #endregion
 
@@ -1234,11 +1221,12 @@ namespace System.Windows.FutureStyle.Office2007
             {
                 x = rect.X + rect.Width / 2;
                 y = rect.Bottom - (rect.Height - 3) / 2;
-
+/*
                 // The drop down button is position 1 pixel incorrectly when in RTL
                 if ((item is ToolStripDropDownButton) && 
                     (item.RightToLeft == RightToLeft.Yes))
                     x++;
+                */
             }
 
             // Create triangle using a series of lines

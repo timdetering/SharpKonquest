@@ -1,4 +1,4 @@
-namespace System.Windows.FutureStyle.Office2007
+namespace System.Windows.Office2007
 {
     using System;
     using System.ComponentModel;
@@ -10,18 +10,20 @@ namespace System.Windows.FutureStyle.Office2007
     /// <summary>
     /// A class that can act as a container for the main controls on the main window of an application.
     /// </summary>
-    public class OfficeBackPanel : Panel
+    public class BackPanel : Panel
     {
         /// <summary>
         /// Initializes a new instance of the ClientPanel class.
         /// </summary>
-        public OfficeBackPanel()
+        public BackPanel()
         {
             this.dibujarSombras = false;
             this.Dock = DockStyle.Fill;
             this.BackColor = Color.Transparent;
             dibujarGlossy = true;
-            this.Style = OfficeBackPanelStyles.Luna;
+            this.Style = BackPanelStyles.Luna;
+            this.ShadowSize = 10;
+            this.ShadowOpacity = 25;
         }
 
         /// <summary>
@@ -74,7 +76,9 @@ namespace System.Windows.FutureStyle.Office2007
                         this.renderer.DrawClientPanelBackground(e.Graphics, base.ClientRectangle);
 
                         if (dibujarGlossy)
-                            e.Graphics.DrawImage(global::SharpKonquest.Properties.Resources.BackgroundGlossy, 0, 0);
+                        {
+                            e.Graphics.DrawImage(Programa.ObtenerImagenIncrustada("BackgroundGlossy"), 0, 0);
+                        }
                     }
                     else
                     {
@@ -153,8 +157,8 @@ namespace System.Windows.FutureStyle.Office2007
         private byte opacidadSombra;
 
         private Style renderer;
-        private OfficeBackPanelStyles currentStyle;
-        public OfficeBackPanelStyles Style
+        private BackPanelStyles currentStyle;
+        public BackPanelStyles Style
         {
             get { return currentStyle; }
             set
@@ -162,10 +166,10 @@ namespace System.Windows.FutureStyle.Office2007
                 currentStyle = value;
                 switch (currentStyle)
                 {
-                    case OfficeBackPanelStyles.Vista:
+                    case BackPanelStyles.Vista:
                         renderer = new Vista();
                         break;
-                    case OfficeBackPanelStyles.Transparent:
+                    case BackPanelStyles.Transparent:
                         renderer = new Transparent();
                         break;
                     default:
@@ -243,7 +247,7 @@ namespace System.Windows.FutureStyle.Office2007
         #endregion
     }
 
-    public enum OfficeBackPanelStyles
+    public enum BackPanelStyles
     {
         Luna, Vista, Transparent
     }

@@ -9,7 +9,7 @@ using SharpKonquest.Clases;
 
 namespace SharpKonquest.Ventanas
 {
-    partial class SimularBatalla : Form
+    partial class SimularBatalla : GlassForm
     {
         public SimularBatalla(Planeta planeta, Planeta planeta2, Cliente jugador)
         {
@@ -17,8 +17,11 @@ namespace SharpKonquest.Ventanas
 
             this.Icon = Icon.ExtractAssociatedIcon(Application.ExecutablePath);
 
-
+            if(jugador!=null)
             label1.Text = "Simulacion de batalla para el jugador " + jugador.Nombre + " desde el planeta " + planeta.Name;
+            else
+            label1.Text = "Simulador de batallas";
+         
 
             numericUpDownEx1.Value = planeta.Naves;
             numericUpDownEx4.Value = planeta.TecnologiaMilitar;
@@ -44,8 +47,8 @@ namespace SharpKonquest.Ventanas
             int restantesDefensor = 0;
             for (int contador = 0; contador < 100; contador++)
             {
-                Batalla resultadoBatalla = Batalla.SimularBatalla(numericUpDownEx1.Value,
-           numericUpDownEx4.Value, numericUpDownEx2.Value, numericUpDownEx3.Value);
+                Batalla resultadoBatalla = Batalla.SimularBatalla((int)numericUpDownEx1.Value,
+         (int)numericUpDownEx4.Value, (int)numericUpDownEx2.Value, (int)numericUpDownEx3.Value);
 
                 if (resultadoBatalla.Resultado == Batalla.ResultadoBatalla.GanaAtacante)
                     victorias++;

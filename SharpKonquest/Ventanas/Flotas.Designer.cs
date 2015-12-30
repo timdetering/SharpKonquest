@@ -65,7 +65,6 @@
             this.listView1.Name = "listView1";
             this.listView1.Size = new System.Drawing.Size(636, 224);
             this.listView1.TabIndex = 1;
-            this.listView1.UseCompatibleStateImageBehavior = false;
             this.listView1.View = System.Windows.Forms.View.Details;
             // 
             // columnHeader1
@@ -105,7 +104,6 @@
             // Flotas
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(661, 266);
             this.Controls.Add(this.listView1);
             this.Controls.Add(this.label1);

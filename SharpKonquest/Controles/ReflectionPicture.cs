@@ -26,7 +26,7 @@ namespace System.Windows.FutureStyle
         void ReflectionPicture_Resize(object sender, EventArgs e)
         {
             areaImagen = ObtenerAreaImagen();
-            ActualizarReflejo();
+            ActualizarReflejo(imagen);
         }
 
         private Image reflejo;
@@ -45,34 +45,33 @@ namespace System.Windows.FutureStyle
                     return;
                 }
 
-                if (cache.ContainsKey(imagen.GetHashCode()) && cache[imagen.GetHashCode()]!=null)
+                if (cache.ContainsKey(imagen) && cache[imagen]!=null)
                 {
-                    reflejo = cache[imagen.GetHashCode()];
+                    reflejo = cache[imagen];
                     this.Refresh();
                 }
                 else
                 {
-                    ActualizarReflejo();
-                    if(reflejo!=null)
-                    cache.Add(imagen.GetHashCode(), (Image)reflejo.Clone());
+                    ActualizarReflejo(imagen);
+
                 }
 
             }
         }
-        private Dictionary<int, Image> cache=new Dictionary<int,Image>();
+        private Dictionary<Image, Image> cache=new Dictionary<Image,Image>();
 
         private bool restringirProporciones;
         public bool AjustSize
         {
             get { return restringirProporciones; }
-            set { restringirProporciones = value; ActualizarReflejo();  }
+            set { restringirProporciones = value; ActualizarReflejo(imagen); }
         }
 
         private int distanciaReflejo;
         public int ReflectDistance
         {
             get { return distanciaReflejo; }
-            set { distanciaReflejo = value; ActualizarReflejo();  }
+            set { distanciaReflejo = value; ActualizarReflejo(imagen); }
         }
 
 
@@ -80,14 +79,15 @@ namespace System.Windows.FutureStyle
         public byte OpacityIndex
         {
             get { return indiceOpacidad; }
-            set { indiceOpacidad = value; ActualizarReflejo();  }
+            set { indiceOpacidad = value; ActualizarReflejo(imagen); }
         }
 
         private bool actualizando;
-        private void SubActualizarReflejo()
+        private void SubActualizarReflejo(object param)
         {
             try
             {
+                Image imagen = (Image)param;
                 actualizando = true;
                 this.reflejo = null;
 
@@ -116,6 +116,9 @@ namespace System.Windows.FutureStyle
 
                 this.reflejo = reflejo;
                 actualizando = false;
+
+                if (reflejo != null)
+                    cache.Add(imagen, (Image)reflejo.Clone());
               
                 this.Invoke(new EventHandler(refrescar));
             }
@@ -133,16 +136,16 @@ namespace System.Windows.FutureStyle
         }
 
 
-        private void ActualizarReflejo()
+        private void ActualizarReflejo(Image imagen)
         {
             try
             {
                 if (imagen == null || actualizando == true)
                     return;
 
-                System.Threading.Thread sub = new System.Threading.Thread(new System.Threading.ThreadStart(SubActualizarReflejo));
+                System.Threading.Thread sub = new System.Threading.Thread(new System.Threading.ParameterizedThreadStart(SubActualizarReflejo));
             //    sub.Priority = System.Threading.ThreadPriority.Normal;
-                sub.Start();
+                sub.Start(imagen);
             }
             catch
             {
@@ -152,6 +155,7 @@ namespace System.Windows.FutureStyle
 
         private Rectangle ObtenerAreaImagen()
         {
+        	try{
            Rectangle rectangulo= new Rectangle(0, 0, this.Width, (int)(this.Height * 0.6));
            if (restringirProporciones && imagen!=null)
            {
@@ -173,6 +177,7 @@ namespace System.Windows.FutureStyle
                rectangulo.Height = alto;
            }
             return rectangulo;
+        	}catch{return this.ClientRectangle;}
         }
         protected override void OnPaint(PaintEventArgs e)
         {
@@ -197,7 +202,7 @@ namespace System.Windows.FutureStyle
                     e.Graphics.DrawImage(reflejo, rectanguloReflejo);
                 }
                 else
-                    ActualizarReflejo();
+                    ActualizarReflejo(imagen);
 
                 //Dibujar la imagen   
                 e.Graphics.DrawImage(imagen, areaImagen);

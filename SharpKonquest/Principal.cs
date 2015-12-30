@@ -8,12 +8,13 @@ using System.Windows.Forms;
 using SharpKonquest.Ventanas;
 using SharpKonquest.Clases;
 using System.Threading;
+using System.Drawing.Drawing2D;
+using System.TCP;
 
 namespace SharpKonquest
 {
-    partial class Principal : Form
+    partial class Principal : GlassForm
     {
-
         public Principal()
         {
             InitializeComponent();
@@ -21,12 +22,33 @@ namespace SharpKonquest
             this.Icon = Icon.ExtractAssociatedIcon(Application.ExecutablePath);
 
             Actualizador.Actualizacion.ActualizacionDisponible += new Actualizador.Actualizacion.DelegadoActualizacionDisponible(Actualizacion_ActualizacionDisponible);
-            Actualizador.Actualizacion.ComprobarActualizacion(Application.ProductVersion, false, Juego.DatosActualizacion.UrlActualizacion);
+            Actualizador.Actualizacion.ComprobarActualizacion(System.InformacionPrograma.VersionActual, false, System.InformacionPrograma.UrlActualizacion);
 
-            System.Windows.FutureStyle.Office2007.OfficeRenderer renderer = new System.Windows.FutureStyle.Office2007.OfficeRenderer();
-            toolStrip1.Renderer = renderer;
-            toolStrip2.Renderer = renderer;
-            menuStrip1.Renderer = renderer;
+
+            if (System.InformacionPrograma.Mono == false)
+            {
+                interfazToolStripMenuItem.Visible = true;
+                office2007ToolStripMenuItem.PerformClick();
+            }
+            else
+            {
+                interfazToolStripMenuItem.Visible = false;
+                splitContainer1.BackColor = Color.FromArgb(159, 190, 230);
+            }
+
+
+            //Imagenes
+            this.iniciarNuevaPartidaToolStripMenuItem.Image = Programa.ObtenerImagenIncrustada("package_games_board");
+            this.toolStripButton2.Image = Programa.ObtenerImagenIncrustada("package_games_board");
+            this.toolStripButton6.Image = Programa.ObtenerImagenIncrustada("Clanbomber");
+            this.toolStripButton5.Image = Programa.ObtenerImagenIncrustada("Search");
+            this.toolStripButton4.Image = Programa.ObtenerImagenIncrustada("Administrative_Tool");
+            this.toolStripButton7.Image = Programa.ObtenerImagenIncrustada("softwareD");
+            this.toolStripButton3.Image = Programa.ObtenerImagenIncrustada("calculadora");
+            this.toolStripButton1.Image = Programa.ObtenerImagenIncrustada("rendimiento");
+
+            if(System.InformacionPrograma.Mono)
+            	this.Text+=" Mono Version";
         }
 
         private void TamañoCambiado(object sender, EventArgs e)
@@ -64,17 +86,21 @@ namespace SharpKonquest
                     {
                         limitarTiempoDeTurnoToolStripMenuItem.Visible = true;
                         listaJugadores.Items.Add("Todos");
+
+                        toolStripMenuItem5.Visible = true;
+                        guardarpartida.Visible = true;
+                        cargarPartidaToolStripMenuItem.Visible = true;
                     }
                 }
 
                 //Inicializar mapa
                 mapa.Jugadores = new List<Cliente>();
-                foreach (IconListBoxItem item in partida.listaJugadores.Items)
+                foreach (NuevaPartida.ItemLista item in partida.listaJugadores.Items)
                 {
                     bool añadido = false;
                     foreach (Cliente cliente in Clientes)
                     {
-                        if (((Cliente)item.Tag).Nombre == cliente.Nombre)
+                        if (string.Compare(item.Tag.Nombre, cliente.Nombre, true) == 0)
                         {
                             mapa.Jugadores.Add(cliente);
                             listaJugadores.Items.Add(cliente);
@@ -91,25 +117,28 @@ namespace SharpKonquest
                 }
                 mapa.Inicializar((int)partida.semillaMapa.Value, mapa.Jugadores, (int)partida.neutrales.Value);
 
-                panel2.Visible = true;
+
+                groupBox1.Visible = true;
                 listaJugadores.SelectedIndex = 0;
             }
         }
 
         Cliente clienteActual;
-        void ComandoRecibido(int comando, string[] parametros, string cadena, ClienteTCP clienteTcp)
+        void ComandoRecibido(ushort comando, string[] parametros, string cadena, ClienteTCP clienteTcp)
         {
+            if (cerrando)
+                return;
             switch (comando)
             {
                 case 2://Ping
-                    clienteTcp.EnviarDatos(3, "PING OK");
+                    clienteTcp.EnviarComando(3, "PING OK");
                     break;
                 case 51://Inicio de ronda
                     numeroRondaActual = int.Parse(parametros[0]);
                     mapa.RondaActual = numeroRondaActual;
-                    mapa.Refresh();
                     rondaActual.Text = "Ronda " + numeroRondaActual;
                     Informacion("Inicio de la ronda " + numeroRondaActual);
+                    mapa.Refresh();
                     break;
                 case 52://Inicio de turno de jugador
                     Informacion("Turno del jugador " + parametros[0]);
@@ -129,7 +158,7 @@ namespace SharpKonquest
 
                     foreach (Cliente jugador in Clientes)
                     {
-                        if (jugador.Nombre == parametros[0])
+                        if (string.Compare(jugador.Nombre, parametros[0], true) == 0)
                         {
                             clienteActual = jugador;
                             mapa.JugadorActual = clienteActual;
@@ -138,9 +167,16 @@ namespace SharpKonquest
                                 ReproducirAlarma();
 
                             toolStrip2.Enabled = true;
+                            toolStripButton6.Enabled = true;
+                            toolStripButton4.Enabled = true;
+
+                            listaJugadores.Items.Remove(clienteActual);
+                            if (listaJugadores.SelectedIndex == -1)
+                                listaJugadores.SelectedIndex = 0;
+
                             bFinTurno.Visible = true;
-                            jugador.ClienteTcp.EnviarDatos(53, "Comando de inicio de turno recibido");
-                            this.Invoke(new EventHandler(EnviarFlota), null, null);//Enviar ataque
+                            jugador.ClienteTcp.EnviarComando(53, "Comando de inicio de turno recibido");
+                            this.Invoke(new EventHandler(EnviarFlota), new object[] { null, null });//Enviar ataque
                             break;
                         }
                     }
@@ -149,7 +185,17 @@ namespace SharpKonquest
                         HerramientaCancelada();
                         peticion.Text = "Esperando a que acabe su turno....";
                         clienteActual = null;
-                        toolStrip2.Enabled = false;
+
+                        toolStrip2.Enabled = true;
+                        if (Clientes.Count == 1)
+                        {
+                            toolStripButton6.Enabled = false;
+                        }
+                        else
+                        {
+                            toolStripButton6.Enabled = false;
+                            toolStripButton4.Enabled = false;
+                        }
                         bFinTurno.Visible = false;
                         mapa.JugadorActual = null;
                     }
@@ -160,8 +206,16 @@ namespace SharpKonquest
                 case 60://Fin de partida
                     Informacion("El jugador " + parametros[0] + " ha ganadao la partida", true);
 
+                    try
+                    {                        
+                        lblTurno.Text = "¡El jugador " + parametros[0] + " ha ganadao la partida!";
+                        lblTurno.ForeColor = mapa.BuscarJugador(parametros[0]).Color;
+                        peticion.Text = string.Empty;
+                        CancelarHerramienta(null, null);
+                    }
+                    catch { }
                     if (Clientes != null && Clientes.Count > 0)
-                        Clientes[0].ClienteTcp.EnviarDatos(302, "Salir del servidor");
+                        Clientes[0].ClienteTcp.EnviarComando(302, "Salir del servidor");
 
                     break;
                 case 61://Jugador eliminado
@@ -182,6 +236,9 @@ namespace SharpKonquest
                 case 70://Llegada de flota
                     Informacion(string.Format("Han llegado {0} naves de refuerzo al planeta {1}", parametros[1], parametros[0]));
                     break;
+                case 72://Jugador retirado
+                    Informacion(string.Format("El jugador {0} se ha retirado de la partida. Al final del turno sus planetas serán neutrales.", parametros[0]), true);
+                    break;
                 case 71://Batalla
                     Batalla.ResultadoBatalla resultado = (Batalla.ResultadoBatalla)int.Parse(parametros[3]);
 
@@ -189,12 +246,12 @@ namespace SharpKonquest
                     if (resultado == Batalla.ResultadoBatalla.GanaAtacante)
                     {
                         Informacion(string.Format("El planeta {0} ({1}) ha caído ante una flota de {2} naves del jugador {3}. Han sobrevivido {4} naves."
-                            , parametros[0], dueño, parametros[4], parametros[1], parametros[6]), true);
+                                                  , parametros[0], dueño, parametros[4], parametros[1], parametros[6]), true);
                     }
                     else if (resultado == Batalla.ResultadoBatalla.GanaDefensor)
                     {
                         string texto = string.Format("El planeta {0} ({1}) se ha defendido con {4} naves de un ataque de {3} naves del jugador {2}."
-                            , parametros[0], dueño, parametros[1], parametros[4], parametros[5]);
+                                                     , parametros[0], dueño, parametros[1], parametros[4], parametros[5]);
                         if (parametros[2] != string.Empty)//No es neutral
                             texto += " Han sobrevivido " + parametros[7] + " naves.";
                         Informacion(texto, true);
@@ -202,64 +259,71 @@ namespace SharpKonquest
                     else//Empate
                     {
                         Informacion(string.Format("La batalla en el planeta {0} entre {1} naves del jugador {2} y {3} naves del jugador {4} ha terminado en empate. Han sobrevivido {5} naves del atacante y {6} del defensor."
-                         , parametros[0], parametros[4], parametros[1], parametros[5], dueño, parametros[6], parametros[7]), true);
+                                                  , parametros[0], parametros[4], parametros[1], parametros[5], dueño, parametros[6], parametros[7]), true);
                     }
                     break;
-                case 206://Actualizacion de datos de planetas
-                    for (int contador = 0; contador < parametros.Length; contador += 3)
-                    {
-                        Planeta p = mapa.ObtenerPlaneta(parametros[contador]);
-                        p.Naves = int.Parse(parametros[contador + 1]);
-                        if (parametros[contador + 2] == string.Empty)
-                            p.Dueño = null;
-                        else
-                            p.Dueño = mapa.BuscarJugador(parametros[contador + 2]);
-                    }
+                case 206://Actualizacion de datos
+                    mapa.CargarDatos(parametros);
                     break;
-
-                case 207://Actualizacion de datos de jugadores
-                    foreach (Cliente jugador in mapa.Jugadores)
-                    {
-                        jugador.Flotas.Clear();
-                    }
-
-                    for (int contador = 0; contador < parametros.Length; contador += 7)
-                    {
-                        Cliente jugador = mapa.BuscarJugador(parametros[contador]);
-                        Flota flota = new Flota();
-                        flota.Naves = int.Parse(parametros[contador + 1]);
-                        flota.TecnologiaMilitar = int.Parse(parametros[contador + 2]);
-                        flota.RondaSalida = int.Parse(parametros[contador + 3]);
-                        flota.RondaLlegada = int.Parse(parametros[contador + 4]);
-                        flota.Origen = mapa.ObtenerPlaneta(parametros[contador + 5]);
-                        flota.Destino = mapa.ObtenerPlaneta(parametros[contador + 6]);
-                        flota.Distancia = Cliente.CalcularDistancia(flota.Origen, flota.Destino);
-
-                        jugador.Flotas.Add(flota);
-                    }
-                    mapa.Refresh();
+                case 210://Cargar partida
+                    mapa.Inicializar(int.Parse(parametros[0]), mapa.Jugadores, int.Parse(parametros[1]));
+                    Informacion("El administrador ha cargado una nueva partida", true);
                     break;
                 case 401://Chat de administrador
-                    MessageBox.Show("El administrador envía el siguiente mensaje:\r\n" + parametros[0], "Chat", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    ListViewItem item = new ListViewItem();
+                    item.Text = "Administrador";
+                    item.SubItems.Add(parametros[0]);
+                    item.Font = new Font(item.Font, FontStyle.Bold);
+                    item.ForeColor = Color.Black;
+                    listaChat.Items.Add(item);
+
+                    item.EnsureVisible();
+
+                    if (alarmaAlRecibirMensajeDeChatToolStripMenuItem.Checked)
+                        MensajeNuevo();
                     break;
                 case 402://Chat de jugador
-                    MessageBox.Show("El jugador " + parametros[0] + " te envía el siguiente mensaje:\r\n" + parametros[1], "Chat", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+                    ListViewItem itemChat = new ListViewItem();
+                    itemChat.Text = parametros[0];
+                    itemChat.SubItems.Add(parametros[1]);
+                    foreach (Cliente jugador in mapa.Jugadores)
+                    {
+                        if (jugador.Nombre == parametros[0])
+                        {
+                            itemChat.ForeColor = jugador.Color;
+                            break;
+                        }
+                    }
+                    listaChat.Items.Add(itemChat);
+
+                    itemChat.EnsureVisible();
+
+                    if (alarmaAlRecibirMensajeDeChatToolStripMenuItem.Checked)
+                        MensajeNuevo();
+
                     break;
             }
         }
+
         private void Informacion(string texto)
         {
             Informacion(texto, false);
         }
+
         private void Informacion(string texto, bool mensaje)
         {
-            IconListBoxItem item = new IconListBoxItem();
+            ListViewItem item = new ListViewItem();
             item.Text = texto;
-            iconListBox1.AddItem(item);
-            iconListBox1.ScrollControlIntoView(item);
+            item.SubItems.Add(numeroRondaActual.ToString());
+            listaMensajes.Items.Add(item);
+
+            item.EnsureVisible();
+
+            //   iconListBox1.scr = iconListBox1.Items.Count - 1;
 
             if (mensaje && mostrarMensajesAlRecibirEventosImportanteToolStripMenuItem.Checked)
-                MessageBox.Show(texto,"Información",MessageBoxButtons.OK,MessageBoxIcon.Information);
+                MessageBox.Show(texto, "Información", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
         private int TiempoRestante;
@@ -292,20 +356,30 @@ namespace SharpKonquest
             catch { }
         }
 
+        private void MensajeNuevo()
+        {
+            try
+            {
+                string ruta = System.IO.Path.Combine(Application.StartupPath, "chat.wav");
+                if (System.IO.File.Exists(ruta))
+                {
+                    System.Media.SoundPlayer player = new System.Media.SoundPlayer(ruta);
+                    player.Play();
+                }
+            }
+            catch { }
+        }
+
         #region Eventos de mouse sobre planetas
         private void SobrePlaneta(Mapa mapa, Planeta planeta)
         {
             imagenPlaneta.Image = planeta.Imagen;
 
+            Info.Text = string.Format("Nombre del planeta: {0}\r\nLocalizazión: {1}", planeta.Name, planeta.Localizacion);
             if (planeta.Dueño != null)
             {
-                Info.Text = string.Format(
-                    "Nombre del planeta: {0}\r\nDueño: {1}\r\nNaves: {2}\r\nProducción: {3}\r\nTecnología militar: {4}"
+                Info.Text += string.Format("\r\nDueño: {1}\r\nNaves: {2}\r\nProducción: {3}\r\nTecnología militar: {4}"
                     , planeta.Name, planeta.Dueño.Nombre, planeta.Naves, planeta.Produccion, planeta.TecnologiaMilitar);
-            }
-            else
-            {
-                Info.Text = "Nombre del planeta: " + planeta.Name;
             }
         }
 
@@ -339,7 +413,7 @@ namespace SharpKonquest
 
         void AñadirTextBox(object sender, EventArgs e)
         {
-            this.peticionTexto = new XPTextBox();
+            this.peticionTexto = new TextBox();
             this.peticionTexto.Location = new System.Drawing.Point(427, 8);
             peticionTexto.Left = peticion.Right + 5;
             this.peticionTexto.Size = new System.Drawing.Size(100, 23);
@@ -347,7 +421,7 @@ namespace SharpKonquest
             this.panel1.Controls.Add(this.peticionTexto);
             peticionTexto.Focus();
         }
-        private System.Windows.Forms.XPTextBox peticionTexto;
+        private System.Windows.Forms.TextBox peticionTexto;
 
         void OcultarTextBox(object sender, EventArgs e)
         {
@@ -417,13 +491,26 @@ namespace SharpKonquest
             Application.DoEvents();
 
             HerramientaCancelada();
-            toolStrip2.Enabled = false;
+
+            if (Clientes.Count == 1)
+            {
+                toolStripButton6.Enabled = false;
+            }
+            else
+            {
+                toolStripButton6.Enabled = false;
+                toolStripButton4.Enabled = false;
+            }
+         
             lblTurno.Text = string.Empty;
             peticion.Text = string.Empty;
             bCancelarHerramienta.Visible = false;
 
             if (clienteActual != null)
+            {
+                listaJugadores.Items.Add(clienteActual);
                 clienteActual.FinTurno();
+            }
             clienteActual = null;
         }
 
@@ -495,7 +582,7 @@ namespace SharpKonquest
 
             mapa.Refresh();
 
-            this.Invoke(new EventHandler(EnviarFlota), null, null);//Enviar ataque
+            this.Invoke(new EventHandler(EnviarFlota), new object[] { null, null });//Enviar ataque
         }
 
         private void MedirDistancia(object sender, EventArgs e)
@@ -521,16 +608,24 @@ namespace SharpKonquest
 
             double distancia = Cliente.CalcularDistancia(p1, p2);
             MessageBox.Show("La distancia de ambos planetas es de " +
-                distancia + " años luz.\r\n\r\nUna flota enviada en este turno, llegaría en el turno " +
-                (numeroRondaActual + (int)Math.Truncate(distancia)) + ".", "Distancia", MessageBoxButtons.OK);
+                            distancia + " años luz.\r\n\r\nUna flota enviada en este turno, llegaría en el turno " +
+                            (numeroRondaActual + (int)Math.Round(distancia)) + ".", "Distancia", MessageBoxButtons.OK);
 
-            this.Invoke(new EventHandler(EnviarFlota), null, null);//Enviar ataque
+            this.Invoke(new EventHandler(EnviarFlota), new object[] { null, null });//Enviar ataque
         }
 
         private void MostrarFlotasEnMovimiento(object sender, EventArgs e)
         {
-            Flotas ventana = new Flotas(clienteActual);
-            ventana.ShowDialog();
+            if (Clientes.Count == 1)
+            {
+                Flotas ventana = new Flotas(Clientes[0]);
+                ventana.ShowDialog();
+            }
+            else if (clienteActual != null)
+            {
+                Flotas ventana = new Flotas(clienteActual);
+                ventana.ShowDialog();
+            }
         }
 
         private void SimularBatalla(object sender, EventArgs e)
@@ -551,9 +646,12 @@ namespace SharpKonquest
             if (p2 == p1)
                 goto DeNuevo;
 
-            this.Invoke(new DelegadoSimularBatalla(simularBatalla), p1, p2, clienteActual);
+            if (Clientes.Count == 1)
+                this.Invoke(new DelegadoSimularBatalla(simularBatalla), new object[] { p1, p2, Clientes[0] });
+            else if (clienteActual != null)
+                this.Invoke(new DelegadoSimularBatalla(simularBatalla), new object[] { p1, p2, clienteActual });
 
-            this.Invoke(new EventHandler(EnviarFlota), null, null);//Enviar ataque
+            this.Invoke(new EventHandler(EnviarFlota), new object[] { null, null });//Enviar ataque
         }
 
         private delegate void DelegadoSimularBatalla(Planeta p1, Planeta p2, Cliente jugador);
@@ -579,13 +677,13 @@ namespace SharpKonquest
         #region Actualizaciones
         private void buscarActualizacionesToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            Actualizador.Actualizacion.ComprobarActualizacion(Application.ProductVersion, true, Juego.DatosActualizacion.UrlActualizacion);
+            Actualizador.Actualizacion.ComprobarActualizacion(System.InformacionPrograma.VersionActual, true, System.InformacionPrograma.UrlActualizacion);
         }
 
         void Actualizacion_ActualizacionDisponible(string nuevaVersion, string urlArchivoActualizador)
         {
-            if (MessageBox.Show("Se ha encontrado una nueva versión de SharpKonquest. ¿Quieres actualizar automáticamente los archivos?\r\n\r\nAviso: Si instala la actualización, el programa se cerrará para poder llevarla a cabo.",
-               "Actualización disponible", MessageBoxButtons.YesNo, MessageBoxIcon.Asterisk) == DialogResult.Yes)
+            if (MessageBox.Show("Se ha encontrado una nueva versión (" + nuevaVersion + ") de SharpKonquest. ¿Quieres actualizar automáticamente los archivos?\r\n\r\nAviso: Si instala la actualización, el programa se cerrará para poder llevarla a cabo.",
+                                "Actualización disponible", MessageBoxButtons.YesNo, MessageBoxIcon.Asterisk) == DialogResult.Yes)
             {
                 Application.ApplicationExit += new EventHandler(IniciarActualizador);
                 urlActualizacion = urlArchivoActualizador;
@@ -608,21 +706,36 @@ namespace SharpKonquest
 
         #endregion
 
+
+        private bool cerrando = false;
         private void Cerrar(object sender, FormClosedEventArgs e)
         {
             try
             {
+                cerrando = true;
                 foreach (Cliente jugador in Clientes)
                 {
                     try
                     {
                         if (jugador.AdministradorServidor)
-                            jugador.ClienteTcp.EnviarDatos(302, "Salir del servidor");
-                        jugador.ClienteTcp.EnviarDatos(11, "Adios");
+                            jugador.ClienteTcp.EnviarComando(302, "Salir del servidor");
+                        jugador.ClienteTcp.EnviarComando(11, "Adios");
                     }
                     catch { }
                 }
-
+                System.Threading.Thread.Sleep(50);
+                Application.DoEvents();
+                System.Threading.Thread.Sleep(50);
+                Application.DoEvents();
+                System.Threading.Thread.Sleep(50);
+                Application.DoEvents();
+                System.Threading.Thread.Sleep(50);
+                Application.DoEvents();
+                System.Threading.Thread.Sleep(50);
+                Application.DoEvents();
+                System.Threading.Thread.Sleep(50);
+                Application.DoEvents();
+                System.Threading.Thread.Sleep(50);
                 Application.DoEvents();
             }
             catch { }
@@ -632,16 +745,17 @@ namespace SharpKonquest
                     procesoServidor.Kill();
             }
             catch { }
-            if (string.IsNullOrEmpty(urlActualizacion))
-                Environment.Exit(0);
-            else
+            if (System.InformacionPrograma.Mono)
+            {
                 Application.Exit();
-        }
-
-        private void PanelInformacionCambiado(object sender, EventArgs e)
-        {
-            if (splitContainer2.SplitterDistance != 265)
-                splitContainer2.SplitterDistance = 265;
+            }
+            else
+            {
+                if (string.IsNullOrEmpty(urlActualizacion))
+                    Environment.Exit(0);
+                else
+                    Application.Exit();
+            }
         }
 
         private void acercaDeToolStripMenuItem_Click(object sender, EventArgs e)
@@ -652,7 +766,7 @@ namespace SharpKonquest
 
         private void limpiarToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            iconListBox1.Clear();
+            listaMensajes.Items.Clear();
         }
 
         private void dibujarFlotasPropiasToolStripMenuItem_Click(object sender, EventArgs e)
@@ -671,7 +785,7 @@ namespace SharpKonquest
         {
             if (Clientes.Count > 0)
             {
-                Clientes[0].ClienteTcp.EnviarDatos(303, "Limitar turnos a '" + e.ClickedItem.Tag.ToString() + "' segundos");
+                Clientes[0].ClienteTcp.EnviarComando(303, "Limitar turnos a '" + e.ClickedItem.Tag.ToString() + "' segundos");
             }
         }
 
@@ -687,7 +801,7 @@ namespace SharpKonquest
                     foreach (Cliente jugador in Clientes)
                     {
                         if (jugador.AdministradorServidor)
-                            jugador.ClienteTcp.EnviarDatos(400, string.Format("Difundir mensaje: '{0}'", textoChat.Text));
+                            jugador.ClienteTcp.EnviarComando(400, string.Format("Difundir mensaje: '{0}'", textoChat.Text));
                         textoChat.Text = string.Empty;
                     }
                 }
@@ -695,14 +809,32 @@ namespace SharpKonquest
                 {
                     if (Clientes.Count == 1)
                     {
-                        Clientes[0].ClienteTcp.EnviarDatos(402, string.Format("Enviar mensaje a '{0}': '{1}'", listaJugadores.SelectedItem.ToString(), textoChat.Text));
+                        Clientes[0].ClienteTcp.EnviarComando(402, string.Format("Enviar mensaje a '{0}': '{1}'", listaJugadores.SelectedItem.ToString(), textoChat.Text));
+
+                        ListViewItem itemchat = new ListViewItem();
+                        itemchat.Text = Clientes[0].Nombre + "->" + listaJugadores.SelectedItem.ToString();
+                        itemchat.SubItems.Add(textoChat.Text);
+                        itemchat.ForeColor = Clientes[0].Color;
+
+                        listaChat.Items.Add(itemchat);
+                        itemchat.EnsureVisible();
                     }
                     else if (clienteActual != null)
                     {
-                        clienteActual.ClienteTcp.EnviarDatos(402, string.Format("Enviar mensaje a '{0}': '{1}'", listaJugadores.SelectedItem.ToString(), textoChat.Text));
+                        clienteActual.ClienteTcp.EnviarComando(402, string.Format("Enviar mensaje a '{0}': '{1}'", listaJugadores.SelectedItem.ToString(), textoChat.Text));
+
+                        ListViewItem itemchat = new ListViewItem();
+                        itemchat.Text = clienteActual.Nombre + "->" + listaJugadores.SelectedItem.ToString();
+                        itemchat.SubItems.Add(textoChat.Text);
+                        itemchat.ForeColor = clienteActual.Color;
+
+                        listaChat.Items.Add(itemchat);
+                        itemchat.EnsureVisible();
                     }
                     textoChat.Text = string.Empty;
                 }
+
+                textoChat.Focus();
             }
             catch { }
         }
@@ -712,8 +844,144 @@ namespace SharpKonquest
             if (e.KeyCode == Keys.Enter)
             {
                 e.Handled = true;
-                bChat.PerformClick();                
+                bChat.PerformClick();
             }
+        }
+
+        private void office2007ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            System.Windows.FutureStyle.Office2007.OfficeRenderer renderer = new System.Windows.FutureStyle.Office2007.OfficeRenderer();
+            toolStrip1.Renderer = renderer;
+            toolStrip2.Renderer = renderer;
+            menuStrip1.Renderer = renderer;
+            futurePanel1.Style = System.Windows.Office2007.BackPanelStyles.Luna;
+        }
+
+        private void porDefectoToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            toolStrip1.Renderer = null;
+            toolStrip2.Renderer = null;
+            menuStrip1.Renderer = null;
+            futurePanel1.Style = System.Windows.Office2007.BackPanelStyles.Transparent;
+        }
+
+        private void oscuraToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            System.Windows.FutureStyle.Office2007.OfficeRenderer renderer = new System.Windows.FutureStyle.Office2007.OfficeRenderer();
+            toolStrip1.Renderer = renderer;
+            toolStrip2.Renderer = renderer;
+            menuStrip1.Renderer = renderer;
+            futurePanel1.Style = System.Windows.Office2007.BackPanelStyles.Vista;
+        }
+
+        private void splitContainer2_Panel1_Resize(object sender, EventArgs e)
+        {
+            imagenPlaneta.Left = panel2.Width / 2 - imagenPlaneta.Width / 2;
+            listaChat.Height = groupBox1.Height - 54;
+        }
+
+        private void listaMensajes_DrawItem(object sender, DrawItemEventArgs e)
+        {
+            if (e.Index < 0)
+                return;
+            e.DrawBackground();
+
+            StringFormat format = StringFormat.GenericDefault;
+            format.LineAlignment = StringAlignment.Center;
+            e.Graphics.DrawString(listaMensajes.Items[e.Index].ToString(), this.Font, new SolidBrush(this.ForeColor), e.Bounds, format);
+
+            e.DrawFocusRectangle();
+        }
+
+        private void limpiarToolStripMenuItem1_Click(object sender, EventArgs e)
+        {
+            listaChat.Items.Clear();
+        }
+
+        private void toolStripButton1_Click(object sender, EventArgs e)
+        {
+            Estadisticas ventana = new Estadisticas(mapa);
+            ventana.Show();
+        }
+
+        private void toolStripMenuItem7_Click(object sender, EventArgs e)
+        {
+            if (saveFileDialog1.ShowDialog() == DialogResult.OK)
+            {
+                XmlConfig conf = new XmlConfig();
+                conf.SetProperty("semilla", mapa.Semilla);
+                conf.SetProperty("neutrales", mapa.Neutrales);
+                conf.SetProperty("ronda", numeroRondaActual);
+                conf.SetProperty("datos", mapa.GuardarDatos());
+                conf.Save(saveFileDialog1.FileName);
+            }
+        }
+
+        private void cargarPartidaToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (openFileDialog1.ShowDialog() == DialogResult.OK)
+            {
+                foreach (Cliente jugador in Clientes)
+                {
+                    if (jugador.AdministradorServidor)
+                    {
+                        XmlConfig conf = new XmlConfig(openFileDialog1.FileName);
+                        conf.Load();
+
+                        jugador.ClienteTcp.EnviarComando(210, string.Format("Cargar la partida de semilla '{0}', con '{1}' neutrales y en la ronda '{2}'. Datos: '{3}'",
+                            conf.GetInt("semilla", 0), conf.GetInt("neutrales", 0), conf.GetInt("ronda", 0), conf.GetString("datos", string.Empty).Replace("'", "&apos;")));
+
+                        break;
+                    }
+                }
+            }
+        }
+
+        private void ningunaToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            mapa.ImagenFondo = null;
+            mapa.ColorFondoCeldas = Color.Black;
+        }
+
+        private void espacioToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            mapa.ImagenFondo = Programa.ObtenerImagenIncrustada("fondoespacio");
+        }
+
+        private void elegirToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (openFileDialog2.ShowDialog() == DialogResult.OK)
+            {
+                try
+                {
+                    mapa.ImagenFondo = Image.FromFile(openFileDialog2.FileName);
+                }
+                catch { MessageBox.Show("Imagen no válida"); }
+            }
+        }
+
+        private void degradadoToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            mapa.ImagenFondo = null;
+            mapa.brochaCeldas = new LinearGradientBrush(new Rectangle(0, 0, mapa.Width, mapa.Height),
+                Color.Black, Color.DimGray, LinearGradientMode.ForwardDiagonal);
+            mapa.Refresh();
+        }
+
+        private void mostrarDestinoEnLaLíneaDeFlotaToolStripMenuItem_CheckedChanged(object sender, EventArgs e)
+        {
+            mapa.DibujarDestinoFlotas = mostrarDestinoEnLaLíneaDeFlotaToolStripMenuItem.Checked;
+            mapa.Refresh();
+        }
+
+        private void listaMensajes_SizeChanged(object sender, EventArgs e)
+        {
+            columnHeader2.Width = listaMensajes.Width - 65;
+        }
+
+        private void listaChat_SizeChanged(object sender, EventArgs e)
+        {
+            columnHeader4.Width = listaChat.Width - 165;
         }
     }
 }

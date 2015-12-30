@@ -1,0 +1,163 @@
+﻿<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.50727</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{E3AC3B72-B60C-4375-AB41-5DBAD92A94EF}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>SharpKonquest</RootNamespace>
+    <AssemblyName>SharpKonquest</AssemblyName>
+    <ApplicationIcon>White_Atom_256.ico</ApplicationIcon>
+    <TargetFrameworkVersion>Mono v2.0</TargetFrameworkVersion>
+    <AllowUnsafeBlocks>False</AllowUnsafeBlocks>
+    <NoStdLib>False</NoStdLib>
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>Full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\Mono</OutputPath>
+    <DefineConstants>DEBUG;TRACE;MONO</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>PdbOnly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <DebugSymbols>false</DebugSymbols>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
+    <CheckForOverflowUnderflow>False</CheckForOverflowUnderflow>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Platform)' == 'AnyCPU' ">
+    <RegisterForComInterop>False</RegisterForComInterop>
+    <GenerateSerializationAssemblies>Auto</GenerateSerializationAssemblies>
+    <BaseAddress>4194304</BaseAddress>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <FileAlignment>4096</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
+    <IntermediateOutputPath>obj\Release\Mono</IntermediateOutputPath>
+    <CheckForOverflowUnderflow>False</CheckForOverflowUnderflow>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Design" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Controles\Errores\Error.cs">
+      <Link>Controles\Error.cs</Link>
+    </Compile>
+    <Compile Include="Controles\Errores\Error.designer.cs">
+      <Link>Controles\Error.designer.cs</Link>
+    </Compile>
+    <Compile Include="Controles\Errores\SMTP_Mail.cs">
+      <Link>Controles\SMTP_Mail.cs</Link>
+    </Compile>
+    <Compile Include="Controles\OfficeBackPanel.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Controles\OfficeStatusStrip.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Controles\ReflectionPicture.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controles\Renderer\Office2007ColorTable.cs" />
+    <Compile Include="Controles\Renderer\Office2007Helpers.cs" />
+    <Compile Include="Controles\Renderer\Office2007Renderer.cs" />
+    <Compile Include="Ventanas\AcercaDe.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Ventanas\AcercaDe.Designer.cs">
+      <DependentUpon>AcercaDe.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Ventanas\Estadisticas.cs" />
+    <Compile Include="Ventanas\NuevaPartida.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Ventanas\NuevaPartida.Designer.cs">
+      <DependentUpon>NuevaPartida.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Principal.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Principal.designer.cs">
+      <DependentUpon>Principal.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Programa.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <EmbeddedResource Include="Controles\Errores\Error.resx">
+      <Link>Controles\Error.resx</Link>
+      <DependentUpon>Error.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Principal.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>Principal.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\Recursos.resx">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Ventanas\AcercaDe.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>AcercaDe.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Ventanas\Flotas.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>Flotas.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Ventanas\NuevaPartida.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>NuevaPartida.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Ventanas\SimularBatalla.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>SimularBatalla.cs</DependentUpon>
+    </EmbeddedResource>
+    <Compile Include="Ventanas\Flotas.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Ventanas\Flotas.Designer.cs">
+      <DependentUpon>Flotas.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Ventanas\SimularBatalla.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Ventanas\SimularBatalla.Designer.cs">
+      <DependentUpon>SimularBatalla.cs</DependentUpon>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="protocolo.txt" />
+    <Content Include="White_Atom_256.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Actualizador\ActualizadorMono.csproj">
+      <Project>{2C993AE9-8A6E-4697-AFCC-B437D334F656}</Project>
+      <Name>ActualizadorMono</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Libreria\LibreriaMono.csproj">
+      <Project>{E1DB6B12-AC40-4418-A3EF-CD095C40394E}</Project>
+      <Name>LibreriaMono</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(SharpDevelopBinPath)\SharpDevelop.Build.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

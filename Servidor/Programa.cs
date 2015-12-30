@@ -15,7 +15,7 @@ namespace System
             Application.ThreadException += new ThreadExceptionEventHandler(Application_ThreadException);
             AppDomain.CurrentDomain.UnhandledException += new UnhandledExceptionEventHandler(CurrentDomain_UnhandledException);
                 Console.WriteLine("Iniciando servidor...");
-            SharpKonquest.Servidor server = new SharpKonquest.Servidor();
+           new SharpKonquest.Servidor();
             EstadoEspera.WaitOne();
             Environment.Exit(0);
         }

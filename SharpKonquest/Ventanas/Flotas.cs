@@ -9,7 +9,7 @@ using SharpKonquest.Clases;
 
 namespace SharpKonquest.Ventanas
 {
-    partial class Flotas : Form
+    partial class Flotas : GlassForm
     {
         public Cliente jugador;
         public Flotas(Cliente jugador)
