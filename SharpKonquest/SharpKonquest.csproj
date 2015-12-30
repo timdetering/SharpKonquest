@@ -1,0 +1,185 @@
+﻿<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.50727</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{E3AC3B72-B60C-4375-AB41-5DBAD92A94EF}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>SharpKonquest</RootNamespace>
+    <AssemblyName>SharpKonquest</AssemblyName>
+    <ApplicationIcon>White_Atom_256.ico</ApplicationIcon>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <GenerateSerializationAssemblies>Auto</GenerateSerializationAssemblies>
+    <DebugSymbols>true</DebugSymbols>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Deployment" />
+    <Reference Include="System.Design" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Controles\GlassButton.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Controles\GlassButton.designer.cs">
+      <DependentUpon>GlassButton.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Controles\IconListBox\IconListBox.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Controles\IconListBox\IconListBoxItem.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Controles\NumericUpDownEx.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controles\NumericUpDownEx.designer.cs">
+      <DependentUpon>NumericUpDownEx.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Controles\OfficeBackPanel.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Controles\OfficeStatusStrip.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Controles\ReflectionPicture.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controles\Renderer\Office2007ColorTable.cs" />
+    <Compile Include="Controles\Renderer\Office2007Helpers.cs" />
+    <Compile Include="Controles\Renderer\Office2007Renderer.cs" />
+    <Compile Include="Controles\XPTextBox.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Ventanas\AcercaDe.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Ventanas\AcercaDe.Designer.cs">
+      <DependentUpon>AcercaDe.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Ventanas\NuevaPartida.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Ventanas\NuevaPartida.Designer.cs">
+      <DependentUpon>NuevaPartida.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Principal.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Principal.designer.cs">
+      <DependentUpon>Principal.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Programa.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <EmbeddedResource Include="Controles\NumericUpDownEx.resx">
+      <DependentUpon>NumericUpDownEx.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controles\XPTextBox.resx">
+      <DependentUpon>XPTextBox.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Ventanas\AcercaDe.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>AcercaDe.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Ventanas\Flotas.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>Flotas.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Ventanas\NuevaPartida.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>NuevaPartida.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Principal.resx">
+      <DependentUpon>Principal.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Ventanas\SimularBatalla.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>SimularBatalla.cs</DependentUpon>
+    </EmbeddedResource>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Resources.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Ventanas\Flotas.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Ventanas\Flotas.Designer.cs">
+      <DependentUpon>Flotas.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Ventanas\SimularBatalla.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Ventanas\SimularBatalla.Designer.cs">
+      <DependentUpon>SimularBatalla.cs</DependentUpon>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\BackgroundGlossy.png" />
+    <None Include="Resources\softwareD.png" />
+    <None Include="Resources\Search.png" />
+    <None Include="Resources\package_games_board.png" />
+    <None Include="Resources\Entire Network.png" />
+    <None Include="Resources\Clanbomber.png" />
+    <None Include="Resources\calculadora.png" />
+    <None Include="Resources\Administración de rendimiento.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\logo.png" />
+    <None Include="protocolo.txt" />
+    <Content Include="White_Atom_256.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\Actualizador\Actualizador\Actualizador.csproj">
+      <Project>{2C993AE9-8A6E-4697-AFCC-B437D334F656}</Project>
+      <Name>Actualizador</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Libreria\Juego.csproj">
+      <Project>{E1DB6B12-AC40-4418-A3EF-CD095C40394E}</Project>
+      <Name>Juego</Name>
+      <Private>True</Private>
+    </ProjectReference>
+    <ProjectReference Include="..\Servidor\Servidor.csproj">
+      <Project>{EFDE4998-3671-477B-BAED-C3FFED0BC6C0}</Project>
+      <Name>Servidor</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

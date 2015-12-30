@@ -1,0 +1,48 @@
+Mensajes del protocolo SharpKonquest
+
+//General
+1 - OK
+2 - PING
+3 - PING OK
+10 - Login nuevo jugador (IdCliente, VersionCliente, nombre, color)
+11 - Desconectar
+12 - Login nuevo jugador correcto
+13 - Eres admin
+51 - Inicio de ronda
+52 - Inicio de turno de jugador(Nombre, color, tiempo limite)
+53 - Comando de inicio de ronda recibido
+60 - El jugador gana la partida (Nombre de jugador)
+61 - Jugador eliminado, sin planetas ni flotas (Nombre de jugador)
+62 - Jugador sin planetas (Nombre de jugador)
+70 - Información de llegada de flota (planeta y naves)
+71 - Información de batalla (Destino,atacante,defensor,resultado,inicialesAtacante,inicialesDefensor,restantesAtacante,restantesDefensor)
+
+
+//Errores
+100 - Nombre repetido
+101 - Color repetido
+102 - Partida ya iniciada
+103 - Versión antigua
+
+
+//Datos
+200 - Información sobre jugadores y mapa (Nombres, colores, semilla y neutrales)
+201 - Iniciar partida
+203 - Fin del turno del jugador
+204 - Fin del tiempo de turno
+205 - Envio de flota (naves,origen,destino)
+206 - Actualización de datos de planetas
+207 - Actualización de datos de flotas
+208 - Información de jugador expulsado
+
+//Administracion del servidor
+300 - Establecer datos del mapa (Semilla y neutrales)
+301 - Iniciar partida
+302 - Salir
+303 - Establecer segundos limite por turno
+304 - Expulsar jugador
+
+//Chat
+400 - Mensaje de administrador
+401 - Mensaje de administrador recibido
+402 - Enviar mensaje de jugador (destino u origen,texto)
