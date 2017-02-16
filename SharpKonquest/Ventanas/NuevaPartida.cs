@@ -232,7 +232,7 @@ namespace SharpKonquest
 
                 clientes.Add(cliente);
                 cliente.ClienteTcp.DatosRecibidos += ComandoRecibido;
-                cliente.Conectar(Programa.IdCliente, System.InformacionPrograma.VersionActual);
+                cliente.Conectar(Programa.IdCliente, InformacionPrograma.VersionActual);
             }
             catch (System.Net.Sockets.SocketException error)
             {

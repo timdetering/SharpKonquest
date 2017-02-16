@@ -73,12 +73,14 @@ namespace SharpKonquest.Ventanas
                             return;
                         if (rondaActual != mapa.RondaActual)
                         {
-                            this.Invoke(new delegadoActualizarDatos(this.ActualizarDatos), new object[] { this.mapa });
+                            this.Invoke(new delegadoActualizarDatos(this.ActualizarDatos), new object[] {this.mapa});
                             return;
                         }
                         Thread.Sleep(150);
                     }
-                    catch { }
+                    catch
+                    {
+                    }
                 }
             }).Start();
         }
@@ -102,7 +104,11 @@ namespace SharpKonquest.Ventanas
             this.listView1.AllowColumnReorder = true;
             this.listView1.Anchor = AnchorStyles.Right | AnchorStyles.Left | AnchorStyles.Bottom | AnchorStyles.Top;
             this.listView1.BackColor = SystemColors.Window;
-            this.listView1.Columns.AddRange(new ColumnHeader[] { this.columnHeader8, this.columnHeader9, this.columnHeader10, this.columna, this.columnHeader11, this.columnHeader12 });
+            this.listView1.Columns.AddRange(new ColumnHeader[]
+            {
+                this.columnHeader8, this.columnHeader9, this.columnHeader10, this.columna, this.columnHeader11,
+                this.columnHeader12
+            });
             this.listView1.Location = new Point(12, 30);
             this.listView1.Name = "listView1";
             this.listView1.Size = new Size(0x284, 0xe9);

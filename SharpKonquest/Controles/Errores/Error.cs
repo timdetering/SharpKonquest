@@ -9,7 +9,7 @@ using System.Threading;
 using System.Diagnostics;
 using System.aTxLiB.Mail;
 
-namespace System
+namespace SharpKonquest
 {
     public partial class Error : Form
     {
@@ -349,10 +349,10 @@ Aviso: perderá todos sus datos no guardados.";
 
         private static string HTML=@"<!DOCTYPE HTML PUBLIC ""-//W3C//DTD HTML 4.0 Transitional//EN"">
 <html>
-	<head>
-		<title></title>
-	</head>
-	<body>
+    <head>
+        <title></title>
+    </head>
+    <body>
         <span style=""color: red""><strong>
         Error de %nombreprograma%, versión %version%
             <br />
@@ -383,8 +383,8 @@ Aviso: perderá todos sus datos no guardados.";
                 %variablesSistema%
 
         </span></span>
-	
-	</body>
+    
+    </body>
 </html>";
     }
 }

@@ -13,7 +13,7 @@ namespace SharpKonquest.Ventanas
         public AcercaDe()
         {
             InitializeComponent();
-            label2.Text = "Versión " + System.InformacionPrograma.VersionActual;
+            label2.Text = "Versión " + InformacionPrograma.VersionActual;
             this.Icon = Icon.ExtractAssociatedIcon(Application.ExecutablePath);
             
             this.pictureBox1.Image = Programa.ObtenerImagenIncrustada("logo");

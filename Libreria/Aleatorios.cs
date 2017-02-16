@@ -1,9 +1,7 @@
-namespace System
+using System;
+
+namespace SharpKonquest
 {
-    using System.Globalization;
-    using System.Runtime.InteropServices;
-
-
     public class Aleatorios
     {
         private int inext;
@@ -96,7 +94,7 @@ namespace System
             {
                 maxValue *= -1;
             }
-            return (int) (this.Sample() * maxValue);
+            return (int)(this.Sample() * maxValue);
         }
 
         public virtual int Next(int minValue, int maxValue)
@@ -106,13 +104,13 @@ namespace System
                 int temp = minValue;
                 minValue = maxValue;
                 maxValue = temp;
-              }
+            }
             long num = maxValue - minValue;
             if (num <= 0x7fffffff)
             {
-                return (((int) (this.Sample() * num)) + minValue);
+                return (((int)(this.Sample() * num)) + minValue);
             }
-            return (((int) ((long) (this.GetSampleForLargeRange() * num))) + minValue);
+            return (((int)((long)(this.GetSampleForLargeRange() * num))) + minValue);
         }
 
         public virtual void NextBytes(byte[] buffer)
@@ -123,7 +121,7 @@ namespace System
             }
             for (int i = 0; i < buffer.Length; i++)
             {
-                buffer[i] = (byte) (this.InternalSample() % 0x100);
+                buffer[i] = (byte)(this.InternalSample() % 0x100);
             }
         }
 

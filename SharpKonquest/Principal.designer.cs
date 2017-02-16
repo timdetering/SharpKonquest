@@ -36,6 +36,7 @@ namespace SharpKonquest
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Principal));
             this.toolStripContainer1 = new System.Windows.Forms.ToolStripContainer();
             this.officeStatusStrip1 = new System.Windows.Office2007.OfficeStatusStrip();
             this.rondaActual = new System.Windows.Forms.ToolStripStatusLabel();
@@ -43,8 +44,8 @@ namespace SharpKonquest
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.panel3 = new System.Windows.Forms.Panel();
             this.listaMensajes = new System.Windows.Forms.ListView();
-            this.columnHeader1 = new System.Windows.Forms.ColumnHeader();
-            this.columnHeader2 = new System.Windows.Forms.ColumnHeader();
+            this.columnHeader2 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.columnHeader1 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.panel4 = new System.Windows.Forms.Panel();
             this.mapa = new SharpKonquest.Clases.Mapa();
             this.splitContainer2 = new System.Windows.Forms.SplitContainer();
@@ -53,8 +54,8 @@ namespace SharpKonquest
             this.imagenPlaneta = new System.Windows.FutureStyle.ReflectionPicture();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.listaChat = new System.Windows.Forms.ListView();
-            this.columnHeader3 = new System.Windows.Forms.ColumnHeader();
-            this.columnHeader4 = new System.Windows.Forms.ColumnHeader();
+            this.columnHeader3 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.columnHeader4 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.textoChat = new System.Windows.Forms.TextBox();
             this.listaJugadores = new System.Windows.Forms.ComboBox();
             this.bChat = new System.Windows.Forms.Button();
@@ -143,378 +144,283 @@ namespace SharpKonquest
             // 
             // toolStripContainer1
             // 
+            resources.ApplyResources(this.toolStripContainer1, "toolStripContainer1");
             // 
             // toolStripContainer1.BottomToolStripPanel
             // 
+            resources.ApplyResources(this.toolStripContainer1.BottomToolStripPanel, "toolStripContainer1.BottomToolStripPanel");
             this.toolStripContainer1.BottomToolStripPanel.Controls.Add(this.officeStatusStrip1);
             // 
             // toolStripContainer1.ContentPanel
             // 
+            resources.ApplyResources(this.toolStripContainer1.ContentPanel, "toolStripContainer1.ContentPanel");
             this.toolStripContainer1.ContentPanel.Controls.Add(this.futurePanel1);
-            this.toolStripContainer1.ContentPanel.Size = new System.Drawing.Size(817, 532);
-            this.toolStripContainer1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.toolStripContainer1.Location = new System.Drawing.Point(0, 0);
+            // 
+            // toolStripContainer1.LeftToolStripPanel
+            // 
+            resources.ApplyResources(this.toolStripContainer1.LeftToolStripPanel, "toolStripContainer1.LeftToolStripPanel");
             this.toolStripContainer1.Name = "toolStripContainer1";
-            this.toolStripContainer1.Size = new System.Drawing.Size(817, 603);
-            this.toolStripContainer1.TabIndex = 0;
-            this.toolStripContainer1.Text = "toolStripContainer1";
+            // 
+            // toolStripContainer1.RightToolStripPanel
+            // 
+            resources.ApplyResources(this.toolStripContainer1.RightToolStripPanel, "toolStripContainer1.RightToolStripPanel");
             // 
             // toolStripContainer1.TopToolStripPanel
             // 
+            resources.ApplyResources(this.toolStripContainer1.TopToolStripPanel, "toolStripContainer1.TopToolStripPanel");
             this.toolStripContainer1.TopToolStripPanel.Controls.Add(this.menuStrip1);
             this.toolStripContainer1.TopToolStripPanel.Controls.Add(this.toolStrip1);
             this.toolStripContainer1.TopToolStripPanel.Controls.Add(this.toolStrip2);
             // 
             // officeStatusStrip1
             // 
-            this.officeStatusStrip1.Dock = System.Windows.Forms.DockStyle.None;
+            resources.ApplyResources(this.officeStatusStrip1, "officeStatusStrip1");
             this.officeStatusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.rondaActual});
-            this.officeStatusStrip1.Location = new System.Drawing.Point(0, 0);
             this.officeStatusStrip1.Name = "officeStatusStrip1";
-            this.officeStatusStrip1.Size = new System.Drawing.Size(817, 22);
-            this.officeStatusStrip1.TabIndex = 0;
             // 
             // rondaActual
             // 
-            this.rondaActual.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Bold);
+            resources.ApplyResources(this.rondaActual, "rondaActual");
             this.rondaActual.Name = "rondaActual";
-            this.rondaActual.Size = new System.Drawing.Size(126, 17);
-            this.rondaActual.Text = "SharpKonquest 2.0";
             // 
             // futurePanel1
             // 
+            resources.ApplyResources(this.futurePanel1, "futurePanel1");
             this.futurePanel1.BackColor = System.Drawing.Color.Transparent;
             this.futurePanel1.Controls.Add(this.splitContainer1);
             this.futurePanel1.Controls.Add(this.panel1);
-            this.futurePanel1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.futurePanel1.DrawShadows = false;
-            this.futurePanel1.Location = new System.Drawing.Point(0, 0);
             this.futurePanel1.Name = "futurePanel1";
             this.futurePanel1.ShadowOpacity = ((byte)(0));
             this.futurePanel1.ShadowSize = 0;
-            this.futurePanel1.Size = new System.Drawing.Size(817, 532);
             this.futurePanel1.Style = System.Windows.Office2007.BackPanelStyles.Luna;
-            this.futurePanel1.TabIndex = 0;
             // 
             // splitContainer1
             // 
-            this.splitContainer1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.splitContainer1.Location = new System.Drawing.Point(0, 38);
+            resources.ApplyResources(this.splitContainer1, "splitContainer1");
             this.splitContainer1.Name = "splitContainer1";
             // 
             // splitContainer1.Panel1
             // 
+            resources.ApplyResources(this.splitContainer1.Panel1, "splitContainer1.Panel1");
             this.splitContainer1.Panel1.Controls.Add(this.panel3);
             this.splitContainer1.Panel1.Controls.Add(this.panel4);
             // 
             // splitContainer1.Panel2
             // 
+            resources.ApplyResources(this.splitContainer1.Panel2, "splitContainer1.Panel2");
             this.splitContainer1.Panel2.Controls.Add(this.splitContainer2);
             this.splitContainer1.Panel2.Resize += new System.EventHandler(this.splitContainer2_Panel1_Resize);
-            this.splitContainer1.Size = new System.Drawing.Size(817, 494);
-            this.splitContainer1.SplitterDistance = 413;
-            this.splitContainer1.SplitterWidth = 1;
-            this.splitContainer1.TabIndex = 1;
             this.splitContainer1.Resize += new System.EventHandler(this.TamañoCambiado);
             // 
             // panel3
             // 
+            resources.ApplyResources(this.panel3, "panel3");
             this.panel3.Controls.Add(this.listaMensajes);
-            this.panel3.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.panel3.Location = new System.Drawing.Point(0, 384);
             this.panel3.Name = "panel3";
-            this.panel3.Size = new System.Drawing.Size(413, 110);
-            this.panel3.TabIndex = 1;
             // 
             // listaMensajes
             // 
-            this.listaMensajes.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-                        | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            resources.ApplyResources(this.listaMensajes, "listaMensajes");
             this.listaMensajes.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.columnHeader2,
             this.columnHeader1});
-            this.listaMensajes.Location = new System.Drawing.Point(4, 3);
             this.listaMensajes.Name = "listaMensajes";
-            this.listaMensajes.Size = new System.Drawing.Size(405, 104);
-            this.listaMensajes.TabIndex = 1;
             this.listaMensajes.UseCompatibleStateImageBehavior = false;
             this.listaMensajes.View = System.Windows.Forms.View.Details;
             this.listaMensajes.SizeChanged += new System.EventHandler(this.listaMensajes_SizeChanged);
             // 
-            // columnHeader1
-            // 
-            this.columnHeader1.Text = "Turno";
-            this.columnHeader1.Width = 43;
-            // 
             // columnHeader2
             // 
-            this.columnHeader2.Text = "Texto";
-            this.columnHeader2.Width = 354;
+            resources.ApplyResources(this.columnHeader2, "columnHeader2");
+            // 
+            // columnHeader1
+            // 
+            resources.ApplyResources(this.columnHeader1, "columnHeader1");
             // 
             // panel4
             // 
+            resources.ApplyResources(this.panel4, "panel4");
             this.panel4.Controls.Add(this.mapa);
-            this.panel4.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panel4.Location = new System.Drawing.Point(0, 0);
             this.panel4.Name = "panel4";
-            this.panel4.Size = new System.Drawing.Size(413, 494);
-            this.panel4.TabIndex = 2;
             // 
             // mapa
             // 
-            this.mapa.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-                        | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            resources.ApplyResources(this.mapa, "mapa");
             this.mapa.BackColor = System.Drawing.Color.Transparent;
             this.mapa.ColorFondoCeldas = System.Drawing.Color.Black;
-            this.mapa.Font = new System.Drawing.Font("Tahoma", 10F, System.Drawing.FontStyle.Bold);
             this.mapa.ImagenFondo = null;
-            this.mapa.Location = new System.Drawing.Point(0, 0);
-            this.mapa.Margin = new System.Windows.Forms.Padding(4);
             this.mapa.Name = "mapa";
-            this.mapa.Size = new System.Drawing.Size(360, 360);
-            this.mapa.TabIndex = 0;
-            this.mapa.MouseClicPlaneta += new SharpKonquest.Clases.Mapa.DelegadoPlaneta(this.ClicPlaneta);
             this.mapa.MouseSobrePlaneta += new SharpKonquest.Clases.Mapa.DelegadoPlaneta(this.SobrePlaneta);
             this.mapa.MouseFueraPlaneta += new SharpKonquest.Clases.Mapa.DelegadoPlaneta(this.FueraPlaneta);
+            this.mapa.MouseClicPlaneta += new SharpKonquest.Clases.Mapa.DelegadoPlaneta(this.ClicPlaneta);
             // 
             // splitContainer2
             // 
-            this.splitContainer2.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.splitContainer2.Location = new System.Drawing.Point(0, 0);
+            resources.ApplyResources(this.splitContainer2, "splitContainer2");
             this.splitContainer2.Name = "splitContainer2";
-            this.splitContainer2.Orientation = System.Windows.Forms.Orientation.Horizontal;
             // 
             // splitContainer2.Panel1
             // 
+            resources.ApplyResources(this.splitContainer2.Panel1, "splitContainer2.Panel1");
             this.splitContainer2.Panel1.Controls.Add(this.Info);
             this.splitContainer2.Panel1.Controls.Add(this.panel2);
             // 
             // splitContainer2.Panel2
             // 
+            resources.ApplyResources(this.splitContainer2.Panel2, "splitContainer2.Panel2");
             this.splitContainer2.Panel2.Controls.Add(this.groupBox1);
-            this.splitContainer2.Size = new System.Drawing.Size(403, 494);
-            this.splitContainer2.SplitterDistance = 297;
-            this.splitContainer2.SplitterWidth = 10;
-            this.splitContainer2.TabIndex = 3;
             // 
             // Info
             // 
-            this.Info.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.Info.Location = new System.Drawing.Point(0, 281);
+            resources.ApplyResources(this.Info, "Info");
             this.Info.Name = "Info";
-            this.Info.Size = new System.Drawing.Size(403, 16);
-            this.Info.TabIndex = 0;
-            this.Info.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             // 
             // panel2
             // 
+            resources.ApplyResources(this.panel2, "panel2");
             this.panel2.Controls.Add(this.imagenPlaneta);
-            this.panel2.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panel2.Location = new System.Drawing.Point(0, 0);
             this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(403, 281);
-            this.panel2.TabIndex = 4;
             // 
             // imagenPlaneta
             // 
+            resources.ApplyResources(this.imagenPlaneta, "imagenPlaneta");
             this.imagenPlaneta.AjustSize = true;
-            this.imagenPlaneta.Anchor = System.Windows.Forms.AnchorStyles.Top;
             this.imagenPlaneta.Image = null;
-            this.imagenPlaneta.Location = new System.Drawing.Point(101, 0);
             this.imagenPlaneta.Name = "imagenPlaneta";
             this.imagenPlaneta.OpacityIndex = ((byte)(165));
             this.imagenPlaneta.ReflectDistance = 5;
-            this.imagenPlaneta.Size = new System.Drawing.Size(200, 334);
-            this.imagenPlaneta.TabIndex = 2;
             // 
             // groupBox1
             // 
+            resources.ApplyResources(this.groupBox1, "groupBox1");
             this.groupBox1.Controls.Add(this.listaChat);
             this.groupBox1.Controls.Add(this.textoChat);
             this.groupBox1.Controls.Add(this.listaJugadores);
             this.groupBox1.Controls.Add(this.bChat);
-            this.groupBox1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.groupBox1.Location = new System.Drawing.Point(0, 0);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(403, 187);
-            this.groupBox1.TabIndex = 3;
             this.groupBox1.TabStop = false;
-            this.groupBox1.Text = "Chat";
             // 
             // listaChat
             // 
-            this.listaChat.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-                        | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            resources.ApplyResources(this.listaChat, "listaChat");
             this.listaChat.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.columnHeader3,
             this.columnHeader4});
-            this.listaChat.Location = new System.Drawing.Point(6, 46);
             this.listaChat.Name = "listaChat";
-            this.listaChat.Size = new System.Drawing.Size(391, 138);
-            this.listaChat.TabIndex = 6;
             this.listaChat.UseCompatibleStateImageBehavior = false;
             this.listaChat.View = System.Windows.Forms.View.Details;
             this.listaChat.SizeChanged += new System.EventHandler(this.listaChat_SizeChanged);
             // 
             // columnHeader3
             // 
-            this.columnHeader3.Text = "Jugador";
-            this.columnHeader3.Width = 86;
+            resources.ApplyResources(this.columnHeader3, "columnHeader3");
             // 
             // columnHeader4
             // 
-            this.columnHeader4.Text = "Texto";
-            this.columnHeader4.Width = 321;
+            resources.ApplyResources(this.columnHeader4, "columnHeader4");
             // 
             // textoChat
             // 
-            this.textoChat.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
-            this.textoChat.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.textoChat.Location = new System.Drawing.Point(133, 19);
+            resources.ApplyResources(this.textoChat, "textoChat");
             this.textoChat.Name = "textoChat";
-            this.textoChat.Size = new System.Drawing.Size(194, 20);
-            this.textoChat.TabIndex = 3;
             this.textoChat.KeyDown += new System.Windows.Forms.KeyEventHandler(this.bChat_KeyDown);
             // 
             // listaJugadores
             // 
+            resources.ApplyResources(this.listaJugadores, "listaJugadores");
             this.listaJugadores.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.listaJugadores.FormattingEnabled = true;
-            this.listaJugadores.Location = new System.Drawing.Point(6, 19);
             this.listaJugadores.Name = "listaJugadores";
-            this.listaJugadores.Size = new System.Drawing.Size(121, 21);
-            this.listaJugadores.TabIndex = 2;
             // 
             // bChat
             // 
-            this.bChat.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.bChat.FlatStyle = System.Windows.Forms.FlatStyle.System;
-            this.bChat.Location = new System.Drawing.Point(333, 18);
+            resources.ApplyResources(this.bChat, "bChat");
             this.bChat.Name = "bChat";
-            this.bChat.Size = new System.Drawing.Size(64, 23);
-            this.bChat.TabIndex = 4;
-            this.bChat.Text = "Enviar";
             this.bChat.UseVisualStyleBackColor = true;
             this.bChat.Click += new System.EventHandler(this.bChat_Click);
             this.bChat.KeyDown += new System.Windows.Forms.KeyEventHandler(this.bChat_KeyDown);
             // 
             // panel1
             // 
+            resources.ApplyResources(this.panel1, "panel1");
             this.panel1.Controls.Add(this.bFinTurno);
             this.panel1.Controls.Add(this.bCancelarHerramienta);
             this.panel1.Controls.Add(this.peticion);
             this.panel1.Controls.Add(this.lblTurno);
-            this.panel1.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panel1.Location = new System.Drawing.Point(0, 0);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(817, 38);
-            this.panel1.TabIndex = 3;
             // 
             // bFinTurno
             // 
-            this.bFinTurno.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.bFinTurno.FlatStyle = System.Windows.Forms.FlatStyle.System;
-            this.bFinTurno.Location = new System.Drawing.Point(724, 8);
+            resources.ApplyResources(this.bFinTurno, "bFinTurno");
             this.bFinTurno.Name = "bFinTurno";
-            this.bFinTurno.Size = new System.Drawing.Size(81, 23);
-            this.bFinTurno.TabIndex = 7;
-            this.bFinTurno.Text = "Finalizar turno";
             this.bFinTurno.UseVisualStyleBackColor = true;
-            this.bFinTurno.Visible = false;
             this.bFinTurno.Click += new System.EventHandler(this.FinalizarTurno);
             // 
             // bCancelarHerramienta
             // 
-            this.bCancelarHerramienta.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            resources.ApplyResources(this.bCancelarHerramienta, "bCancelarHerramienta");
             this.bCancelarHerramienta.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.bCancelarHerramienta.FlatStyle = System.Windows.Forms.FlatStyle.System;
-            this.bCancelarHerramienta.Location = new System.Drawing.Point(643, 8);
             this.bCancelarHerramienta.Name = "bCancelarHerramienta";
-            this.bCancelarHerramienta.Size = new System.Drawing.Size(75, 23);
-            this.bCancelarHerramienta.TabIndex = 6;
-            this.bCancelarHerramienta.Text = "Cancelar";
             this.bCancelarHerramienta.UseVisualStyleBackColor = true;
-            this.bCancelarHerramienta.Visible = false;
             this.bCancelarHerramienta.Click += new System.EventHandler(this.CancelarHerramienta);
             // 
             // peticion
             // 
-            this.peticion.AutoSize = true;
-            this.peticion.Font = new System.Drawing.Font("Trebuchet MS", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.peticion.Location = new System.Drawing.Point(34, 10);
+            resources.ApplyResources(this.peticion, "peticion");
             this.peticion.Name = "peticion";
-            this.peticion.Size = new System.Drawing.Size(0, 18);
-            this.peticion.TabIndex = 1;
             // 
             // lblTurno
             // 
-            this.lblTurno.AutoSize = true;
-            this.lblTurno.Font = new System.Drawing.Font("Tahoma", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblTurno.Location = new System.Drawing.Point(9, 7);
+            resources.ApplyResources(this.lblTurno, "lblTurno");
             this.lblTurno.Name = "lblTurno";
-            this.lblTurno.Size = new System.Drawing.Size(0, 25);
-            this.lblTurno.TabIndex = 0;
             // 
             // menuStrip1
             // 
-            this.menuStrip1.Dock = System.Windows.Forms.DockStyle.None;
+            resources.ApplyResources(this.menuStrip1, "menuStrip1");
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.partidaToolStripMenuItem,
             this.opcioToolStripMenuItem,
             this.ayudaToolStripMenuItem});
-            this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(817, 24);
-            this.menuStrip1.TabIndex = 1;
-            this.menuStrip1.Text = "menuStrip1";
             // 
             // partidaToolStripMenuItem
             // 
+            resources.ApplyResources(this.partidaToolStripMenuItem, "partidaToolStripMenuItem");
             this.partidaToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.iniciarNuevaPartidaToolStripMenuItem,
             this.toolStripMenuItem5,
             this.guardarpartida,
             this.cargarPartidaToolStripMenuItem});
             this.partidaToolStripMenuItem.Name = "partidaToolStripMenuItem";
-            this.partidaToolStripMenuItem.Size = new System.Drawing.Size(56, 20);
-            this.partidaToolStripMenuItem.Text = "Partida";
             // 
             // iniciarNuevaPartidaToolStripMenuItem
             // 
+            resources.ApplyResources(this.iniciarNuevaPartidaToolStripMenuItem, "iniciarNuevaPartidaToolStripMenuItem");
             this.iniciarNuevaPartidaToolStripMenuItem.Name = "iniciarNuevaPartidaToolStripMenuItem";
-            this.iniciarNuevaPartidaToolStripMenuItem.Size = new System.Drawing.Size(181, 22);
-            this.iniciarNuevaPartidaToolStripMenuItem.Text = "Iniciar nueva partida";
             this.iniciarNuevaPartidaToolStripMenuItem.Click += new System.EventHandler(this.NuevaPartida);
             // 
             // toolStripMenuItem5
             // 
+            resources.ApplyResources(this.toolStripMenuItem5, "toolStripMenuItem5");
             this.toolStripMenuItem5.Name = "toolStripMenuItem5";
-            this.toolStripMenuItem5.Size = new System.Drawing.Size(178, 6);
-            this.toolStripMenuItem5.Visible = false;
             // 
             // guardarpartida
             // 
+            resources.ApplyResources(this.guardarpartida, "guardarpartida");
             this.guardarpartida.Name = "guardarpartida";
-            this.guardarpartida.Size = new System.Drawing.Size(181, 22);
-            this.guardarpartida.Text = "Guardar partida";
-            this.guardarpartida.Visible = false;
             this.guardarpartida.Click += new System.EventHandler(this.toolStripMenuItem7_Click);
             // 
             // cargarPartidaToolStripMenuItem
             // 
+            resources.ApplyResources(this.cargarPartidaToolStripMenuItem, "cargarPartidaToolStripMenuItem");
             this.cargarPartidaToolStripMenuItem.Name = "cargarPartidaToolStripMenuItem";
-            this.cargarPartidaToolStripMenuItem.Size = new System.Drawing.Size(181, 22);
-            this.cargarPartidaToolStripMenuItem.Text = "Cargar partida";
-            this.cargarPartidaToolStripMenuItem.Visible = false;
             this.cargarPartidaToolStripMenuItem.Click += new System.EventHandler(this.cargarPartidaToolStripMenuItem_Click);
             // 
             // opcioToolStripMenuItem
             // 
+            resources.ApplyResources(this.opcioToolStripMenuItem, "opcioToolStripMenuItem");
             this.opcioToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.mostrarMensajesAlRecibirEventosImportanteToolStripMenuItem,
             this.limitarTiempoDeTurnoToolStripMenuItem,
@@ -529,20 +435,18 @@ namespace SharpKonquest
             this.alarmaAlInicioDelTurnoDelJugadorToolStripMenuItem,
             this.alarmaAlRecibirMensajeDeChatToolStripMenuItem});
             this.opcioToolStripMenuItem.Name = "opcioToolStripMenuItem";
-            this.opcioToolStripMenuItem.Size = new System.Drawing.Size(69, 20);
-            this.opcioToolStripMenuItem.Text = "Opciones";
             // 
             // mostrarMensajesAlRecibirEventosImportanteToolStripMenuItem
             // 
+            resources.ApplyResources(this.mostrarMensajesAlRecibirEventosImportanteToolStripMenuItem, "mostrarMensajesAlRecibirEventosImportanteToolStripMenuItem");
             this.mostrarMensajesAlRecibirEventosImportanteToolStripMenuItem.Checked = true;
             this.mostrarMensajesAlRecibirEventosImportanteToolStripMenuItem.CheckOnClick = true;
             this.mostrarMensajesAlRecibirEventosImportanteToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
             this.mostrarMensajesAlRecibirEventosImportanteToolStripMenuItem.Name = "mostrarMensajesAlRecibirEventosImportanteToolStripMenuItem";
-            this.mostrarMensajesAlRecibirEventosImportanteToolStripMenuItem.Size = new System.Drawing.Size(326, 22);
-            this.mostrarMensajesAlRecibirEventosImportanteToolStripMenuItem.Text = "Mostrar mensajes al recibir eventos importantes";
             // 
             // limitarTiempoDeTurnoToolStripMenuItem
             // 
+            resources.ApplyResources(this.limitarTiempoDeTurnoToolStripMenuItem, "limitarTiempoDeTurnoToolStripMenuItem");
             this.limitarTiempoDeTurnoToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.sinLímiteToolStripMenuItem,
             this.segundosToolStripMenuItem,
@@ -551,231 +455,198 @@ namespace SharpKonquest
             this.minutosToolStripMenuItem1,
             this.minutosToolStripMenuItem2});
             this.limitarTiempoDeTurnoToolStripMenuItem.Name = "limitarTiempoDeTurnoToolStripMenuItem";
-            this.limitarTiempoDeTurnoToolStripMenuItem.Size = new System.Drawing.Size(326, 22);
-            this.limitarTiempoDeTurnoToolStripMenuItem.Text = "Limitar tiempo de turno";
-            this.limitarTiempoDeTurnoToolStripMenuItem.Visible = false;
             this.limitarTiempoDeTurnoToolStripMenuItem.DropDownItemClicked += new System.Windows.Forms.ToolStripItemClickedEventHandler(this.limitarTiempoDeTurnoToolStripMenuItem_Click);
             // 
             // sinLímiteToolStripMenuItem
             // 
+            resources.ApplyResources(this.sinLímiteToolStripMenuItem, "sinLímiteToolStripMenuItem");
             this.sinLímiteToolStripMenuItem.Name = "sinLímiteToolStripMenuItem";
-            this.sinLímiteToolStripMenuItem.Size = new System.Drawing.Size(140, 22);
             this.sinLímiteToolStripMenuItem.Tag = "-1";
-            this.sinLímiteToolStripMenuItem.Text = "Sin límite";
             // 
             // segundosToolStripMenuItem
             // 
+            resources.ApplyResources(this.segundosToolStripMenuItem, "segundosToolStripMenuItem");
             this.segundosToolStripMenuItem.Name = "segundosToolStripMenuItem";
-            this.segundosToolStripMenuItem.Size = new System.Drawing.Size(140, 22);
             this.segundosToolStripMenuItem.Tag = "30";
-            this.segundosToolStripMenuItem.Text = "30 segundos";
             // 
             // sgeundosToolStripMenuItem
             // 
+            resources.ApplyResources(this.sgeundosToolStripMenuItem, "sgeundosToolStripMenuItem");
             this.sgeundosToolStripMenuItem.Name = "sgeundosToolStripMenuItem";
-            this.sgeundosToolStripMenuItem.Size = new System.Drawing.Size(140, 22);
             this.sgeundosToolStripMenuItem.Tag = "60";
-            this.sgeundosToolStripMenuItem.Text = "1 minuto";
             // 
             // minutosToolStripMenuItem
             // 
+            resources.ApplyResources(this.minutosToolStripMenuItem, "minutosToolStripMenuItem");
             this.minutosToolStripMenuItem.Name = "minutosToolStripMenuItem";
-            this.minutosToolStripMenuItem.Size = new System.Drawing.Size(140, 22);
             this.minutosToolStripMenuItem.Tag = "120";
-            this.minutosToolStripMenuItem.Text = "2 minutos";
             // 
             // minutosToolStripMenuItem1
             // 
+            resources.ApplyResources(this.minutosToolStripMenuItem1, "minutosToolStripMenuItem1");
             this.minutosToolStripMenuItem1.Name = "minutosToolStripMenuItem1";
-            this.minutosToolStripMenuItem1.Size = new System.Drawing.Size(140, 22);
             this.minutosToolStripMenuItem1.Tag = "300";
-            this.minutosToolStripMenuItem1.Text = "5 minutos";
             // 
             // minutosToolStripMenuItem2
             // 
+            resources.ApplyResources(this.minutosToolStripMenuItem2, "minutosToolStripMenuItem2");
             this.minutosToolStripMenuItem2.Name = "minutosToolStripMenuItem2";
-            this.minutosToolStripMenuItem2.Size = new System.Drawing.Size(140, 22);
             this.minutosToolStripMenuItem2.Tag = "600";
-            this.minutosToolStripMenuItem2.Text = "10 minutos";
             // 
             // toolStripMenuItem1
             // 
+            resources.ApplyResources(this.toolStripMenuItem1, "toolStripMenuItem1");
             this.toolStripMenuItem1.Name = "toolStripMenuItem1";
-            this.toolStripMenuItem1.Size = new System.Drawing.Size(323, 6);
             // 
             // dibujarFlotasPropiasToolStripMenuItem
             // 
+            resources.ApplyResources(this.dibujarFlotasPropiasToolStripMenuItem, "dibujarFlotasPropiasToolStripMenuItem");
             this.dibujarFlotasPropiasToolStripMenuItem.Checked = true;
             this.dibujarFlotasPropiasToolStripMenuItem.CheckOnClick = true;
             this.dibujarFlotasPropiasToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
             this.dibujarFlotasPropiasToolStripMenuItem.Name = "dibujarFlotasPropiasToolStripMenuItem";
-            this.dibujarFlotasPropiasToolStripMenuItem.Size = new System.Drawing.Size(326, 22);
-            this.dibujarFlotasPropiasToolStripMenuItem.Text = "Dibujar flotas propias";
             this.dibujarFlotasPropiasToolStripMenuItem.CheckedChanged += new System.EventHandler(this.dibujarFlotasPropiasToolStripMenuItem_Click);
             // 
             // dibujarFlotasEnemigasToolStripMenuItem
             // 
+            resources.ApplyResources(this.dibujarFlotasEnemigasToolStripMenuItem, "dibujarFlotasEnemigasToolStripMenuItem");
             this.dibujarFlotasEnemigasToolStripMenuItem.Checked = true;
             this.dibujarFlotasEnemigasToolStripMenuItem.CheckOnClick = true;
             this.dibujarFlotasEnemigasToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
             this.dibujarFlotasEnemigasToolStripMenuItem.Name = "dibujarFlotasEnemigasToolStripMenuItem";
-            this.dibujarFlotasEnemigasToolStripMenuItem.Size = new System.Drawing.Size(326, 22);
-            this.dibujarFlotasEnemigasToolStripMenuItem.Text = "Dibujar flotas enemigas";
             this.dibujarFlotasEnemigasToolStripMenuItem.CheckedChanged += new System.EventHandler(this.dibujarFlotasEnemigasToolStripMenuItem_Click);
             // 
             // mostrarDestinoEnLaLíneaDeFlotaToolStripMenuItem
             // 
+            resources.ApplyResources(this.mostrarDestinoEnLaLíneaDeFlotaToolStripMenuItem, "mostrarDestinoEnLaLíneaDeFlotaToolStripMenuItem");
             this.mostrarDestinoEnLaLíneaDeFlotaToolStripMenuItem.CheckOnClick = true;
             this.mostrarDestinoEnLaLíneaDeFlotaToolStripMenuItem.Name = "mostrarDestinoEnLaLíneaDeFlotaToolStripMenuItem";
-            this.mostrarDestinoEnLaLíneaDeFlotaToolStripMenuItem.Size = new System.Drawing.Size(326, 22);
-            this.mostrarDestinoEnLaLíneaDeFlotaToolStripMenuItem.Text = "Mostrar destino en la línea de flota";
             this.mostrarDestinoEnLaLíneaDeFlotaToolStripMenuItem.CheckedChanged += new System.EventHandler(this.mostrarDestinoEnLaLíneaDeFlotaToolStripMenuItem_CheckedChanged);
             // 
             // toolStripMenuItem2
             // 
+            resources.ApplyResources(this.toolStripMenuItem2, "toolStripMenuItem2");
             this.toolStripMenuItem2.Name = "toolStripMenuItem2";
-            this.toolStripMenuItem2.Size = new System.Drawing.Size(323, 6);
             // 
             // interfazToolStripMenuItem
             // 
+            resources.ApplyResources(this.interfazToolStripMenuItem, "interfazToolStripMenuItem");
             this.interfazToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.porDefectoToolStripMenuItem,
             this.office2007ToolStripMenuItem,
             this.oscuraToolStripMenuItem});
             this.interfazToolStripMenuItem.Name = "interfazToolStripMenuItem";
-            this.interfazToolStripMenuItem.Size = new System.Drawing.Size(326, 22);
-            this.interfazToolStripMenuItem.Text = "Interfaz";
             // 
             // porDefectoToolStripMenuItem
             // 
+            resources.ApplyResources(this.porDefectoToolStripMenuItem, "porDefectoToolStripMenuItem");
             this.porDefectoToolStripMenuItem.Name = "porDefectoToolStripMenuItem";
-            this.porDefectoToolStripMenuItem.Size = new System.Drawing.Size(133, 22);
-            this.porDefectoToolStripMenuItem.Text = "Normal";
             this.porDefectoToolStripMenuItem.Click += new System.EventHandler(this.porDefectoToolStripMenuItem_Click);
             // 
             // office2007ToolStripMenuItem
             // 
+            resources.ApplyResources(this.office2007ToolStripMenuItem, "office2007ToolStripMenuItem");
             this.office2007ToolStripMenuItem.Name = "office2007ToolStripMenuItem";
-            this.office2007ToolStripMenuItem.Size = new System.Drawing.Size(133, 22);
-            this.office2007ToolStripMenuItem.Text = "Office 2007";
             this.office2007ToolStripMenuItem.Click += new System.EventHandler(this.office2007ToolStripMenuItem_Click);
             // 
             // oscuraToolStripMenuItem
             // 
+            resources.ApplyResources(this.oscuraToolStripMenuItem, "oscuraToolStripMenuItem");
             this.oscuraToolStripMenuItem.Name = "oscuraToolStripMenuItem";
-            this.oscuraToolStripMenuItem.Size = new System.Drawing.Size(133, 22);
-            this.oscuraToolStripMenuItem.Text = "Oscura";
             this.oscuraToolStripMenuItem.Click += new System.EventHandler(this.oscuraToolStripMenuItem_Click);
             // 
             // imagenDeFondoToolStripMenuItem
             // 
+            resources.ApplyResources(this.imagenDeFondoToolStripMenuItem, "imagenDeFondoToolStripMenuItem");
             this.imagenDeFondoToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.ningunaToolStripMenuItem,
             this.espacioToolStripMenuItem,
             this.degradadoToolStripMenuItem,
             this.elegirToolStripMenuItem});
             this.imagenDeFondoToolStripMenuItem.Name = "imagenDeFondoToolStripMenuItem";
-            this.imagenDeFondoToolStripMenuItem.Size = new System.Drawing.Size(326, 22);
-            this.imagenDeFondoToolStripMenuItem.Text = "Imagen de fondo";
             // 
             // ningunaToolStripMenuItem
             // 
+            resources.ApplyResources(this.ningunaToolStripMenuItem, "ningunaToolStripMenuItem");
             this.ningunaToolStripMenuItem.Name = "ningunaToolStripMenuItem";
-            this.ningunaToolStripMenuItem.Size = new System.Drawing.Size(132, 22);
-            this.ningunaToolStripMenuItem.Text = "Ninguna";
             this.ningunaToolStripMenuItem.Click += new System.EventHandler(this.ningunaToolStripMenuItem_Click);
             // 
             // espacioToolStripMenuItem
             // 
+            resources.ApplyResources(this.espacioToolStripMenuItem, "espacioToolStripMenuItem");
             this.espacioToolStripMenuItem.Name = "espacioToolStripMenuItem";
-            this.espacioToolStripMenuItem.Size = new System.Drawing.Size(132, 22);
-            this.espacioToolStripMenuItem.Text = "Espacio";
             this.espacioToolStripMenuItem.Click += new System.EventHandler(this.espacioToolStripMenuItem_Click);
             // 
             // degradadoToolStripMenuItem
             // 
+            resources.ApplyResources(this.degradadoToolStripMenuItem, "degradadoToolStripMenuItem");
             this.degradadoToolStripMenuItem.Name = "degradadoToolStripMenuItem";
-            this.degradadoToolStripMenuItem.Size = new System.Drawing.Size(132, 22);
-            this.degradadoToolStripMenuItem.Text = "Degradado";
             this.degradadoToolStripMenuItem.Click += new System.EventHandler(this.degradadoToolStripMenuItem_Click);
             // 
             // elegirToolStripMenuItem
             // 
+            resources.ApplyResources(this.elegirToolStripMenuItem, "elegirToolStripMenuItem");
             this.elegirToolStripMenuItem.Name = "elegirToolStripMenuItem";
-            this.elegirToolStripMenuItem.Size = new System.Drawing.Size(132, 22);
-            this.elegirToolStripMenuItem.Text = "Elegir...";
             this.elegirToolStripMenuItem.Click += new System.EventHandler(this.elegirToolStripMenuItem_Click);
             // 
             // toolStripMenuItem3
             // 
+            resources.ApplyResources(this.toolStripMenuItem3, "toolStripMenuItem3");
             this.toolStripMenuItem3.Name = "toolStripMenuItem3";
-            this.toolStripMenuItem3.Size = new System.Drawing.Size(323, 6);
             // 
             // alarmaAlInicioDelTurnoDelJugadorToolStripMenuItem
             // 
+            resources.ApplyResources(this.alarmaAlInicioDelTurnoDelJugadorToolStripMenuItem, "alarmaAlInicioDelTurnoDelJugadorToolStripMenuItem");
             this.alarmaAlInicioDelTurnoDelJugadorToolStripMenuItem.Checked = true;
             this.alarmaAlInicioDelTurnoDelJugadorToolStripMenuItem.CheckOnClick = true;
             this.alarmaAlInicioDelTurnoDelJugadorToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
             this.alarmaAlInicioDelTurnoDelJugadorToolStripMenuItem.Name = "alarmaAlInicioDelTurnoDelJugadorToolStripMenuItem";
-            this.alarmaAlInicioDelTurnoDelJugadorToolStripMenuItem.Size = new System.Drawing.Size(326, 22);
-            this.alarmaAlInicioDelTurnoDelJugadorToolStripMenuItem.Text = "Alarma al inicio del turno del jugador";
             // 
             // alarmaAlRecibirMensajeDeChatToolStripMenuItem
             // 
+            resources.ApplyResources(this.alarmaAlRecibirMensajeDeChatToolStripMenuItem, "alarmaAlRecibirMensajeDeChatToolStripMenuItem");
             this.alarmaAlRecibirMensajeDeChatToolStripMenuItem.Checked = true;
             this.alarmaAlRecibirMensajeDeChatToolStripMenuItem.CheckOnClick = true;
             this.alarmaAlRecibirMensajeDeChatToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
             this.alarmaAlRecibirMensajeDeChatToolStripMenuItem.Name = "alarmaAlRecibirMensajeDeChatToolStripMenuItem";
-            this.alarmaAlRecibirMensajeDeChatToolStripMenuItem.Size = new System.Drawing.Size(326, 22);
-            this.alarmaAlRecibirMensajeDeChatToolStripMenuItem.Text = "Alarma al recibir mensaje de chat";
             // 
             // ayudaToolStripMenuItem
             // 
+            resources.ApplyResources(this.ayudaToolStripMenuItem, "ayudaToolStripMenuItem");
             this.ayudaToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.acercaDeToolStripMenuItem,
             this.buscarActualizacionesToolStripMenuItem});
             this.ayudaToolStripMenuItem.Name = "ayudaToolStripMenuItem";
-            this.ayudaToolStripMenuItem.Size = new System.Drawing.Size(53, 20);
-            this.ayudaToolStripMenuItem.Text = "Ayuda";
             // 
             // acercaDeToolStripMenuItem
             // 
+            resources.ApplyResources(this.acercaDeToolStripMenuItem, "acercaDeToolStripMenuItem");
             this.acercaDeToolStripMenuItem.Name = "acercaDeToolStripMenuItem";
-            this.acercaDeToolStripMenuItem.Size = new System.Drawing.Size(192, 22);
-            this.acercaDeToolStripMenuItem.Text = "Acerca de...";
             this.acercaDeToolStripMenuItem.Click += new System.EventHandler(this.acercaDeToolStripMenuItem_Click);
             // 
             // buscarActualizacionesToolStripMenuItem
             // 
+            resources.ApplyResources(this.buscarActualizacionesToolStripMenuItem, "buscarActualizacionesToolStripMenuItem");
             this.buscarActualizacionesToolStripMenuItem.Name = "buscarActualizacionesToolStripMenuItem";
-            this.buscarActualizacionesToolStripMenuItem.Size = new System.Drawing.Size(192, 22);
-            this.buscarActualizacionesToolStripMenuItem.Text = "Buscar actualizaciones";
             this.buscarActualizacionesToolStripMenuItem.Click += new System.EventHandler(this.buscarActualizacionesToolStripMenuItem_Click);
             // 
             // toolStrip1
             // 
-            this.toolStrip1.Dock = System.Windows.Forms.DockStyle.None;
+            resources.ApplyResources(this.toolStrip1, "toolStrip1");
             this.toolStrip1.ImageScalingSize = new System.Drawing.Size(48, 48);
             this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripButton2});
-            this.toolStrip1.Location = new System.Drawing.Point(3, 24);
             this.toolStrip1.Name = "toolStrip1";
-            this.toolStrip1.Size = new System.Drawing.Size(97, 25);
-            this.toolStrip1.TabIndex = 0;
-            this.toolStrip1.Text = "Nue";
             // 
             // toolStripButton2
             // 
+            resources.ApplyResources(this.toolStripButton2, "toolStripButton2");
             this.toolStripButton2.Name = "toolStripButton2";
-            this.toolStripButton2.Size = new System.Drawing.Size(85, 22);
-            this.toolStripButton2.Text = "Nueva partida";
             this.toolStripButton2.Click += new System.EventHandler(this.NuevaPartida);
             // 
             // toolStrip2
             // 
-            this.toolStrip2.Dock = System.Windows.Forms.DockStyle.None;
-            this.toolStrip2.Enabled = false;
-            this.toolStrip2.Font = new System.Drawing.Font("Tahoma", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            resources.ApplyResources(this.toolStrip2, "toolStrip2");
             this.toolStrip2.ImageScalingSize = new System.Drawing.Size(48, 48);
             this.toolStrip2.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripButton6,
@@ -784,80 +655,68 @@ namespace SharpKonquest
             this.toolStripButton7,
             this.toolStripButton1,
             this.toolStripButton3});
-            this.toolStrip2.Location = new System.Drawing.Point(100, 24);
             this.toolStrip2.Name = "toolStrip2";
-            this.toolStrip2.Size = new System.Drawing.Size(565, 25);
-            this.toolStrip2.TabIndex = 2;
-            this.toolStrip2.Text = "Nue";
             // 
             // toolStripButton6
             // 
+            resources.ApplyResources(this.toolStripButton6, "toolStripButton6");
             this.toolStripButton6.Name = "toolStripButton6";
-            this.toolStripButton6.Size = new System.Drawing.Size(78, 22);
-            this.toolStripButton6.Text = "Enviar ataque";
             this.toolStripButton6.Click += new System.EventHandler(this.EnviarFlota);
             // 
             // toolStripButton5
             // 
+            resources.ApplyResources(this.toolStripButton5, "toolStripButton5");
             this.toolStripButton5.Name = "toolStripButton5";
-            this.toolStripButton5.Size = new System.Drawing.Size(82, 22);
-            this.toolStripButton5.Text = "Medir distancia";
             this.toolStripButton5.Click += new System.EventHandler(this.MedirDistancia);
             // 
             // toolStripButton4
             // 
+            resources.ApplyResources(this.toolStripButton4, "toolStripButton4");
             this.toolStripButton4.Name = "toolStripButton4";
-            this.toolStripButton4.Size = new System.Drawing.Size(115, 22);
-            this.toolStripButton4.Text = " Flotas en movimiento";
             this.toolStripButton4.Click += new System.EventHandler(this.MostrarFlotasEnMovimiento);
             // 
             // toolStripButton7
             // 
+            resources.ApplyResources(this.toolStripButton7, "toolStripButton7");
             this.toolStripButton7.Name = "toolStripButton7";
-            this.toolStripButton7.Size = new System.Drawing.Size(80, 22);
-            this.toolStripButton7.Text = "Simular Batalla";
             this.toolStripButton7.Click += new System.EventHandler(this.SimularBatalla);
             // 
             // toolStripButton1
             // 
+            resources.ApplyResources(this.toolStripButton1, "toolStripButton1");
             this.toolStripButton1.Name = "toolStripButton1";
-            this.toolStripButton1.Size = new System.Drawing.Size(67, 22);
-            this.toolStripButton1.Text = "Estadísticas";
             this.toolStripButton1.Click += new System.EventHandler(this.toolStripButton1_Click);
             // 
             // toolStripButton3
             // 
+            resources.ApplyResources(this.toolStripButton3, "toolStripButton3");
             this.toolStripButton3.Name = "toolStripButton3";
-            this.toolStripButton3.Size = new System.Drawing.Size(131, 22);
-            this.toolStripButton3.Text = " Calculadora de Windows";
             this.toolStripButton3.Click += new System.EventHandler(this.IniciarCalculadora);
             // 
             // contextMenuStrip2
             // 
+            resources.ApplyResources(this.contextMenuStrip2, "contextMenuStrip2");
             this.contextMenuStrip2.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.limpiarToolStripMenuItem1});
             this.contextMenuStrip2.Name = "contextMenuStrip2";
-            this.contextMenuStrip2.Size = new System.Drawing.Size(115, 26);
             // 
             // limpiarToolStripMenuItem1
             // 
+            resources.ApplyResources(this.limpiarToolStripMenuItem1, "limpiarToolStripMenuItem1");
             this.limpiarToolStripMenuItem1.Name = "limpiarToolStripMenuItem1";
-            this.limpiarToolStripMenuItem1.Size = new System.Drawing.Size(114, 22);
-            this.limpiarToolStripMenuItem1.Text = "Limpiar";
             this.limpiarToolStripMenuItem1.Click += new System.EventHandler(this.limpiarToolStripMenuItem1_Click);
             // 
             // contextMenuStrip1
             // 
+            resources.ApplyResources(this.contextMenuStrip1, "contextMenuStrip1");
             this.contextMenuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.limpiarToolStripMenuItem});
             this.contextMenuStrip1.Name = "contextMenuStrip1";
-            this.contextMenuStrip1.Size = new System.Drawing.Size(115, 26);
             // 
             // limpiarToolStripMenuItem
             // 
+            resources.ApplyResources(this.limpiarToolStripMenuItem, "limpiarToolStripMenuItem");
             this.limpiarToolStripMenuItem.Name = "limpiarToolStripMenuItem";
-            this.limpiarToolStripMenuItem.Size = new System.Drawing.Size(114, 22);
-            this.limpiarToolStripMenuItem.Text = "Limpiar";
             this.limpiarToolStripMenuItem.Click += new System.EventHandler(this.limpiarToolStripMenuItem_Click);
             // 
             // timer1
@@ -867,42 +726,37 @@ namespace SharpKonquest
             // 
             // peticionTexto
             // 
-            this.peticionTexto.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.peticionTexto.Location = new System.Drawing.Point(0, 0);
+            resources.ApplyResources(this.peticionTexto, "peticionTexto");
             this.peticionTexto.Name = "peticionTexto";
-            this.peticionTexto.Size = new System.Drawing.Size(150, 20);
-            this.peticionTexto.TabIndex = 0;
             // 
             // toolStripMenuItem4
             // 
+            resources.ApplyResources(this.toolStripMenuItem4, "toolStripMenuItem4");
             this.toolStripMenuItem4.Name = "toolStripMenuItem4";
-            this.toolStripMenuItem4.Size = new System.Drawing.Size(181, 6);
             // 
             // openFileDialog1
             // 
             this.openFileDialog1.DefaultExt = "skx";
             this.openFileDialog1.FileName = "openFileDialog1";
-            this.openFileDialog1.Filter = "Partidas de SharpKonquest|*.skx|Todos los archivos|*.*";
+            resources.ApplyResources(this.openFileDialog1, "openFileDialog1");
             // 
             // saveFileDialog1
             // 
             this.saveFileDialog1.DefaultExt = "skx";
-            this.saveFileDialog1.Filter = "Partidas de SharpKonquest|*.skx|Todos los archivos|*.*";
+            resources.ApplyResources(this.saveFileDialog1, "saveFileDialog1");
             // 
             // openFileDialog2
             // 
             this.openFileDialog2.FileName = "openFileDialog2";
-            this.openFileDialog2.Filter = "Imágenes|*.jpg;*.bmp;*.jpeg;*.png;*.bmp|Todos los archivos|*.*";
+            resources.ApplyResources(this.openFileDialog2, "openFileDialog2");
             // 
             // Principal
             // 
+            resources.ApplyResources(this, "$this");
             this.CancelButton = this.bCancelarHerramienta;
-            this.ClientSize = new System.Drawing.Size(817, 603);
             this.Controls.Add(this.toolStripContainer1);
-            this.Location = new System.Drawing.Point(0, 0);
             this.MainMenuStrip = this.menuStrip1;
             this.Name = "Principal";
-            this.Text = "SharpKonquest 2";
             this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.Cerrar);
             this.toolStripContainer1.BottomToolStripPanel.ResumeLayout(false);

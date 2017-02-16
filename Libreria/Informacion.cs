@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace System
+namespace SharpKonquest
 {
     public class InformacionPrograma
     {
@@ -14,7 +14,7 @@ namespace System
             {
                 return new string[] {
                 "http://sharpkonquest.googlepages.com/actualizacion.xml",
-                "http://thauglor.no-ip.info/SharpKonquest/actualizacion.xml" 
+                "http://thauglor.no-ip.info/SharpKonquest/actualizacion.xml"
             };
             }
         }

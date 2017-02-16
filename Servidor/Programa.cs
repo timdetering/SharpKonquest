@@ -1,10 +1,8 @@
 using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Threading;
 using System.Windows.Forms;
 
-namespace System
+namespace SharpKonquest
 {
     class Programa
     {
@@ -14,8 +12,9 @@ namespace System
         {
             Application.ThreadException += new ThreadExceptionEventHandler(Application_ThreadException);
             AppDomain.CurrentDomain.UnhandledException += new UnhandledExceptionEventHandler(CurrentDomain_UnhandledException);
-                Console.WriteLine("Iniciando servidor...");
-           new SharpKonquest.Servidor();
+            Console.WriteLine("Iniciando servidor...");
+            //Console.WriteLine(Resources.StartingServer);
+            new SharpKonquest.Servidor();
             EstadoEspera.WaitOne();
             Environment.Exit(0);
         }
@@ -49,14 +48,22 @@ namespace System
                     string valorParteA = parte;
                     string valorParteB;
                     if (contador >= partesB.Length)
+                    {
                         valorParteB = string.Empty;
+                    }
                     else
+                    {
                         valorParteB = partesB[contador];
+                    }
 
                     if (string.Compare(valorParteA, valorParteB) > 0)
+                    {
                         return 1;
+                    }
                     else if (string.Compare(valorParteA, valorParteB) < 0)
+                    {
                         return -1;
+                    }
                     contador++;
                 }
                 return 0;

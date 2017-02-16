@@ -1,4 +1,4 @@
-﻿namespace System
+﻿namespace SharpKonquest
 {
     partial class Error
     {

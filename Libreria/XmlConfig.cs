@@ -7,22 +7,22 @@ using System.Drawing;
 using System.Xml;
 using System.IO;
 
-namespace System
+namespace SharpKonquest
 {
-   public class XmlConfig
+    public class XmlConfig
     {
-       public static CompressionAlgorithm defaultCompresor = CompressionAlgorithm.Deflate;
-       /// <summary>
-       /// It is called when the config needs to process a xml property, and returns the xml property real value
-       /// </summary>
-       public static event ParsePropertyHandler ParseProperty;
-       public delegate object ParsePropertyHandler(XmlElement element);
+        public static CompressionAlgorithm defaultCompresor = CompressionAlgorithm.Deflate;
+        /// <summary>
+        /// It is called when the config needs to process a xml property, and returns the xml property real value
+        /// </summary>
+        public static event ParsePropertyHandler ParseProperty;
+        public delegate object ParsePropertyHandler(XmlElement element);
 
-       /// <summary>
-       /// It is called when the config needs to save a object and process its string value
-       /// </summary>
-       public static event GetPropertyHandler GetPropertyValue;
-       public delegate XmlElement GetPropertyHandler(object value);
+        /// <summary>
+        /// It is called when the config needs to save a object and process its string value
+        /// </summary>
+        public static event GetPropertyHandler GetPropertyValue;
+        public delegate XmlElement GetPropertyHandler(object value);
 
         public XmlConfig()
         {
@@ -33,25 +33,25 @@ namespace System
             versionPrograma = null;
         }
 
-       public XmlConfig(string path)
-            : this()
+        public XmlConfig(string path)
+             : this()
         {
             rutaArchivo = path;
 
             Load();
         }
 
-       public XmlConfig(string path,bool compress):this(path)
-       {
-           this.Compress= compress;
-       }
+        public XmlConfig(string path, bool compress) : this(path)
+        {
+            this.Compress = compress;
+        }
 
-       public enum CompressionAlgorithm
-       {
-           Deflate,
-           Gzip,
-           LZMA
-       }
+        public enum CompressionAlgorithm
+        {
+            Deflate,
+            Gzip,
+            LZMA
+        }
 
         //Campos privados
         private string rutaArchivo;
@@ -59,19 +59,19 @@ namespace System
         private Dictionary<string, object> diccionario;
         private bool autoGuardar;
         private System.Drawing.Imaging.ImageFormat imageFormat;
-       private CompressionAlgorithm compresor;
-       private string versionPrograma;
+        private CompressionAlgorithm compresor;
+        private string versionPrograma;
 
         #region Propiedades
 
-       /// <summary>
-       /// Obtiene o establece el compresor que se utiliza para comprimir el archivo de configuracion
-       /// </summary>
-       public CompressionAlgorithm Compressor
-       {
-           get { return compresor; }
-           set { compresor = value; }
-       }
+        /// <summary>
+        /// Obtiene o establece el compresor que se utiliza para comprimir el archivo de configuracion
+        /// </summary>
+        public CompressionAlgorithm Compressor
+        {
+            get { return compresor; }
+            set { compresor = value; }
+        }
 
         public bool Compress
         {
@@ -109,21 +109,21 @@ namespace System
             set { imageFormat = value; }
         }
 
-       /// <summary>
-       /// Version del programa usada para crear el archivo
-       /// </summary>
-       public string ProgramVersion
-       {
-           get { return versionPrograma; }
-           set { versionPrograma = value; }
-       }
+        /// <summary>
+        /// Version del programa usada para crear el archivo
+        /// </summary>
+        public string ProgramVersion
+        {
+            get { return versionPrograma; }
+            set { versionPrograma = value; }
+        }
 
-       /// <summary>
-       /// Obtiene el numero de claves almacenadas en el diccionario
-       /// </summary>
-       public int Count
-       { get { return diccionario.Count; } }
-       
+        /// <summary>
+        /// Obtiene el numero de claves almacenadas en el diccionario
+        /// </summary>
+        public int Count
+        { get { return diccionario.Count; } }
+
         #endregion
 
         #region Funciones
@@ -272,7 +272,7 @@ namespace System
 
         public string GetString(string key, string defaultvalue)
         {
-            object objeto=this.GetProperty(key, defaultvalue);
+            object objeto = this.GetProperty(key, defaultvalue);
             if (objeto != null)
                 return objeto.ToString();
             else return null;
@@ -463,7 +463,7 @@ namespace System
                 }
                 if (comprimirArchivo)
                 {
-                    documento.DocumentElement.AppendChild(comprimirDatos(propiedades,compresor));
+                    documento.DocumentElement.AppendChild(comprimirDatos(propiedades, compresor));
                 }
                 else
                     documento.DocumentElement.AppendChild(propiedades);
@@ -476,167 +476,167 @@ namespace System
             }
         }
 
-       private string ObtenerCabeceraXml()
-       {
-           string res = @"<?xml version=""1.0""?><XmlConfig";
+        private string ObtenerCabeceraXml()
+        {
+            string res = @"<?xml version=""1.0""?><XmlConfig";
 
-           if (string.IsNullOrEmpty(versionPrograma) == false)
-               res += string.Format(" programVersion=\"{0}\"", versionPrograma);
-           if (comprimirArchivo)
-               res += string.Format(@" compressed=""true"" algorithm=""{0}""", compresor.ToString());
+            if (string.IsNullOrEmpty(versionPrograma) == false)
+                res += string.Format(" programVersion=\"{0}\"", versionPrograma);
+            if (comprimirArchivo)
+                res += string.Format(@" compressed=""true"" algorithm=""{0}""", compresor.ToString());
 
-           res += "/>";
-           return res;
-       }
+            res += "/>";
+            return res;
+        }
 
-       private static string LeerTexto(string archivo)
-       {
-           System.IO.StreamReader fichero = new System.IO.StreamReader(archivo, System.Text.Encoding.Default);
-           string res = fichero.ReadToEnd();
-           fichero.Close();
-           return res;
-       }
+        private static string LeerTexto(string archivo)
+        {
+            System.IO.StreamReader fichero = new System.IO.StreamReader(archivo, System.Text.Encoding.Default);
+            string res = fichero.ReadToEnd();
+            fichero.Close();
+            return res;
+        }
 
-       public bool Load(string path)
-       {
-           bool loaded = false;
-           try
-           {
-               XmlDocument documento = new XmlDocument();
+        public bool Load(string path)
+        {
+            bool loaded = false;
+            try
+            {
+                XmlDocument documento = new XmlDocument();
 
-                   documento.LoadXml(LeerTexto(path));
-               XmlElement elementoBase;
-               if (esDocumentoComprimido(documento))
-               {
-                   elementoBase = descomprimirDatos(documento.DocumentElement["properties"],
-                       ObtenerAlgoritmo(documento));
-               }
-               else
-               {
-                   elementoBase = documento.DocumentElement["properties"];
-               }
+                documento.LoadXml(LeerTexto(path));
+                XmlElement elementoBase;
+                if (esDocumentoComprimido(documento))
+                {
+                    elementoBase = descomprimirDatos(documento.DocumentElement["properties"],
+                        ObtenerAlgoritmo(documento));
+                }
+                else
+                {
+                    elementoBase = documento.DocumentElement["properties"];
+                }
 
-               if (elementoBase != null)
-               {
-                   diccionario = new Dictionary<string, object>(elementoBase.ChildNodes.Count);
-                   SetValueFromXmlElement(elementoBase);
-               }
-               loaded = true;
-           }
-           catch
-           {
-               loaded= false;
-           }
-           finally
-           {
-               System.GC.Collect();               
-           }
-           return loaded;
-       }
+                if (elementoBase != null)
+                {
+                    diccionario = new Dictionary<string, object>(elementoBase.ChildNodes.Count);
+                    SetValueFromXmlElement(elementoBase);
+                }
+                loaded = true;
+            }
+            catch
+            {
+                loaded = false;
+            }
+            finally
+            {
+                System.GC.Collect();
+            }
+            return loaded;
+        }
 
-       private XmlNode comprimirDatos(XmlElement propiedades,CompressionAlgorithm compresor)
-       {
-           string valor = propiedades.OuterXml;
+        private XmlNode comprimirDatos(XmlElement propiedades, CompressionAlgorithm compresor)
+        {
+            string valor = propiedades.OuterXml;
 
-           System.IO.MemoryStream stream = new MemoryStream(valor.Length);
-           System.IO.Stream streamCompresor=null;
+            System.IO.MemoryStream stream = new MemoryStream(valor.Length);
+            System.IO.Stream streamCompresor = null;
 
-           switch (compresor)
-           {
-               case CompressionAlgorithm.Deflate:
-                   streamCompresor = new System.IO.Compression.DeflateStream(stream, System.IO.Compression.CompressionMode.Compress);
-                   break;
-               case CompressionAlgorithm.Gzip:
-                   streamCompresor = new System.IO.Compression.GZipStream(stream, System.IO.Compression.CompressionMode.Compress);
-                   break;
+            switch (compresor)
+            {
+                case CompressionAlgorithm.Deflate:
+                    streamCompresor = new System.IO.Compression.DeflateStream(stream, System.IO.Compression.CompressionMode.Compress);
+                    break;
+                case CompressionAlgorithm.Gzip:
+                    streamCompresor = new System.IO.Compression.GZipStream(stream, System.IO.Compression.CompressionMode.Compress);
+                    break;
 #if LZMAPRESENT
-               case CompressionAlgorithm.LZMA:
-                   streamCompresor = new System.IO.Compression.LzmaStream(stream, System.IO.Compression.CompressionMode.Compress);
-                   break;
+                case CompressionAlgorithm.LZMA:
+                    streamCompresor = new System.IO.Compression.LzmaStream(stream, System.IO.Compression.CompressionMode.Compress);
+                    break;
 #endif
-               default:
-                   streamCompresor = new System.IO.Compression.DeflateStream(stream, System.IO.Compression.CompressionMode.Compress);
-                   break;
-           }
-           
+                default:
+                    streamCompresor = new System.IO.Compression.DeflateStream(stream, System.IO.Compression.CompressionMode.Compress);
+                    break;
+            }
 
-           byte[] datos = System.Text.Encoding.Default.GetBytes(valor);
-           streamCompresor.Write(datos, 0, datos.Length);
-           streamCompresor.Close();
 
-           byte[] datosComprimidos = stream.ToArray();
-           stream.Close();
+            byte[] datos = System.Text.Encoding.Default.GetBytes(valor);
+            streamCompresor.Write(datos, 0, datos.Length);
+            streamCompresor.Close();
 
-           //  XmlElement propiedades = documento.CreateElement("properties");
-           propiedades.InnerText = Convert.ToBase64String(datosComprimidos);
+            byte[] datosComprimidos = stream.ToArray();
+            stream.Close();
 
-           return propiedades;
-       }
+            //  XmlElement propiedades = documento.CreateElement("properties");
+            propiedades.InnerText = Convert.ToBase64String(datosComprimidos);
 
-       private XmlElement descomprimirDatos(XmlElement propiedades, CompressionAlgorithm descompresor)
-       {
-           string textoComprimido = propiedades.InnerText;
-           byte[] datosComprimidos = Convert.FromBase64String(textoComprimido);
+            return propiedades;
+        }
 
-           System.IO.MemoryStream stream = new MemoryStream(datosComprimidos);
-           System.IO.Stream streamDescompresor = null;
+        private XmlElement descomprimirDatos(XmlElement propiedades, CompressionAlgorithm descompresor)
+        {
+            string textoComprimido = propiedades.InnerText;
+            byte[] datosComprimidos = Convert.FromBase64String(textoComprimido);
 
-           switch (descompresor)
-           {
-               case CompressionAlgorithm.Deflate:
-                   streamDescompresor = new System.IO.Compression.DeflateStream(stream, System.IO.Compression.CompressionMode.Decompress);
-                   break;
-               case CompressionAlgorithm.Gzip:
-                   streamDescompresor = new System.IO.Compression.GZipStream(stream, System.IO.Compression.CompressionMode.Decompress);
-                   break;
+            System.IO.MemoryStream stream = new MemoryStream(datosComprimidos);
+            System.IO.Stream streamDescompresor = null;
+
+            switch (descompresor)
+            {
+                case CompressionAlgorithm.Deflate:
+                    streamDescompresor = new System.IO.Compression.DeflateStream(stream, System.IO.Compression.CompressionMode.Decompress);
+                    break;
+                case CompressionAlgorithm.Gzip:
+                    streamDescompresor = new System.IO.Compression.GZipStream(stream, System.IO.Compression.CompressionMode.Decompress);
+                    break;
 #if LZMAPRESENT
-               case CompressionAlgorithm.LZMA:
-                   streamDescompresor = new System.IO.Compression.LzmaStream(stream, System.IO.Compression.CompressionMode.Decompress);
-                   break;
+                case CompressionAlgorithm.LZMA:
+                    streamDescompresor = new System.IO.Compression.LzmaStream(stream, System.IO.Compression.CompressionMode.Decompress);
+                    break;
 #endif
-               default: 
-                   streamDescompresor = new System.IO.Compression.DeflateStream(stream, System.IO.Compression.CompressionMode.Decompress);
-                                    break;
-           }
+                default:
+                    streamDescompresor = new System.IO.Compression.DeflateStream(stream, System.IO.Compression.CompressionMode.Decompress);
+                    break;
+            }
 
-           int contador = 1;
-           byte[] datosLeidos;
-           int leido;
-           do
-           {
-               datosLeidos = new byte[2097152 * contador];
-               leido = streamDescompresor.Read(datosLeidos, 0, datosLeidos.Length);
-               contador++;
-           } while (leido == datosLeidos.Length - 1);
+            int contador = 1;
+            byte[] datosLeidos;
+            int leido;
+            do
+            {
+                datosLeidos = new byte[2097152 * contador];
+                leido = streamDescompresor.Read(datosLeidos, 0, datosLeidos.Length);
+                contador++;
+            } while (leido == datosLeidos.Length - 1);
 
 
-           string textoDescomprimido = System.Text.Encoding.Default.GetString(datosLeidos, 0, leido);
+            string textoDescomprimido = System.Text.Encoding.Default.GetString(datosLeidos, 0, leido);
 
-           propiedades.InnerXml = textoDescomprimido;
-           return propiedades["properties"];
-       }
+            propiedades.InnerXml = textoDescomprimido;
+            return propiedades["properties"];
+        }
 
-       private CompressionAlgorithm ObtenerAlgoritmo(XmlDocument documento)
-       {
-           XmlAttribute atributo = documento.DocumentElement.Attributes["algorithm"];
-           if (atributo != null)
-           {
-               return (CompressionAlgorithm)Enum.Parse(typeof(CompressionAlgorithm),atributo.Value);
-           }
-           else
-           {
-               return CompressionAlgorithm.Deflate;
-           }
-       }
+        private CompressionAlgorithm ObtenerAlgoritmo(XmlDocument documento)
+        {
+            XmlAttribute atributo = documento.DocumentElement.Attributes["algorithm"];
+            if (atributo != null)
+            {
+                return (CompressionAlgorithm)Enum.Parse(typeof(CompressionAlgorithm), atributo.Value);
+            }
+            else
+            {
+                return CompressionAlgorithm.Deflate;
+            }
+        }
 
-       private bool esDocumentoComprimido(XmlDocument documento)
-       {
-           XmlAttribute atributo=  documento.DocumentElement.Attributes["compressed"];
-           if(atributo!=null && string.Compare(atributo.Value,"true",true)==0)
-               return true;
-           else
-               return false;
-       }
+        private bool esDocumentoComprimido(XmlDocument documento)
+        {
+            XmlAttribute atributo = documento.DocumentElement.Attributes["compressed"];
+            if (atributo != null && string.Compare(atributo.Value, "true", true) == 0)
+                return true;
+            else
+                return false;
+        }
 
         #region Convertir los valores a XML
 
@@ -764,7 +764,7 @@ namespace System
 
             if (GetPropertyValue != null)
             {
-                XmlElement xml=GetPropertyValue(EntryValue);
+                XmlElement xml = GetPropertyValue(EntryValue);
                 if (xml != null)
                 {
                     propiedad.AppendChild(xml);
@@ -792,7 +792,7 @@ namespace System
                 //CDATA
                 XmlCDataSection cdata = doc.CreateCDataSection(EntryValue.ToString());
                 propiedad.AppendChild(cdata);
-                return null; 
+                return null;
             }
             if (EntryValue is string[])
             {
@@ -853,271 +853,271 @@ namespace System
             return this.ConvertToString(EntryValue);
         }
 
-       protected void SetValueFromXmlElement(XmlElement element)
-       {
-           if (element == null || element.ChildNodes == null)
-               return;
+        protected void SetValueFromXmlElement(XmlElement element)
+        {
+            if (element == null || element.ChildNodes == null)
+                return;
 
-           foreach (XmlElement element1 in element.ChildNodes)
-           {
-               if (element1.Name != "property")
-               {
-                   continue;
-               }
-               try
-               {
-                   diccionario[element1.Attributes["key"].InnerText] =
-                       GetValueFromXmlElement(element1);
-               }
-               catch (Exception)
-               {
-                   continue;
-               }
-           }
-       }
+            foreach (XmlElement element1 in element.ChildNodes)
+            {
+                if (element1.Name != "property")
+                {
+                    continue;
+                }
+                try
+                {
+                    diccionario[element1.Attributes["key"].InnerText] =
+                        GetValueFromXmlElement(element1);
+                }
+                catch (Exception)
+                {
+                    continue;
+                }
+            }
+        }
 
-       /// <summary>
-       /// Genera una varible a partir del atributo value
-       /// </summary>
-       protected object GetValueFromXmlElement(XmlElement element)
-       {
-           string Tipo = element.Attributes["type"].InnerText;
+        /// <summary>
+        /// Genera una varible a partir del atributo value
+        /// </summary>
+        protected object GetValueFromXmlElement(XmlElement element)
+        {
+            string Tipo = element.Attributes["type"].InnerText;
 
-           if (ParseProperty != null)
-               return ParseProperty(element);
+            if (ParseProperty != null)
+                return ParseProperty(element);
 
-           #region Tipos complejos
-           switch (Tipo)
-           {
-               case "Rectangle":
-                   {
-                       if (!element.HasChildNodes)
-                       {
-                           return null;
-                       }
-                       System.Drawing.Rectangle rectangulo = new Rectangle(0, 0, 0, 0);
+            #region Tipos complejos
+            switch (Tipo)
+            {
+                case "Rectangle":
+                    {
+                        if (!element.HasChildNodes)
+                        {
+                            return null;
+                        }
+                        System.Drawing.Rectangle rectangulo = new Rectangle(0, 0, 0, 0);
 
-                       rectangulo.Size = (Size)GetValueFromXmlElement(element["Size"]);
-                       rectangulo.Location = (Point)GetValueFromXmlElement(element["Location"]);
+                        rectangulo.Size = (Size)GetValueFromXmlElement(element["Size"]);
+                        rectangulo.Location = (Point)GetValueFromXmlElement(element["Location"]);
 
-                       return rectangulo;
-                   }
-               case "String":
-                   {
-                       if (!element.HasChildNodes)
-                           return element.Attributes["value"].InnerText;
-                       else
-                          return element.ChildNodes[0].Value;
-                   }
-               case "String[]":
-                   {
-                       if (!element.HasChildNodes)
-                       {
-                           return null;
-                       }
-                       string[] textArray1 = new string[element.ChildNodes.Count];
-                       int num1 = 0;
-                       foreach (XmlElement element2 in element)
-                       {
-                           textArray1[num1] = element2.InnerText;
-                           num1++;
-                       }
-                       return textArray1;
-                   }
-               case "Array":
-                   {
-                       if (!element.HasChildNodes)
-                       {
-                           return null;
-                       }
-                       object[] array = new object[element.ChildNodes.Count];
-                       int num1 = 0;
-                       foreach (XmlElement element2 in element)
-                       {
-                           array[num1] = GetValueFromXmlElement(element2);
-                           num1++;
-                       }
-                       return array;
-                   }
-               case "IList":
-                   {
-                       if (!element.HasChildNodes)
-                       {
-                           return null;
-                       }
-                       System.Collections.ArrayList list = new System.Collections.ArrayList(element.ChildNodes.Count);
-                       foreach (XmlElement element2 in element)
-                       {
-                           list.Add(GetValueFromXmlElement(element2));
-                       }
-                       return list;
-                   }
-           }
-           #endregion
+                        return rectangulo;
+                    }
+                case "String":
+                    {
+                        if (!element.HasChildNodes)
+                            return element.Attributes["value"].InnerText;
+                        else
+                            return element.ChildNodes[0].Value;
+                    }
+                case "String[]":
+                    {
+                        if (!element.HasChildNodes)
+                        {
+                            return null;
+                        }
+                        string[] textArray1 = new string[element.ChildNodes.Count];
+                        int num1 = 0;
+                        foreach (XmlElement element2 in element)
+                        {
+                            textArray1[num1] = element2.InnerText;
+                            num1++;
+                        }
+                        return textArray1;
+                    }
+                case "Array":
+                    {
+                        if (!element.HasChildNodes)
+                        {
+                            return null;
+                        }
+                        object[] array = new object[element.ChildNodes.Count];
+                        int num1 = 0;
+                        foreach (XmlElement element2 in element)
+                        {
+                            array[num1] = GetValueFromXmlElement(element2);
+                            num1++;
+                        }
+                        return array;
+                    }
+                case "IList":
+                    {
+                        if (!element.HasChildNodes)
+                        {
+                            return null;
+                        }
+                        System.Collections.ArrayList list = new System.Collections.ArrayList(element.ChildNodes.Count);
+                        foreach (XmlElement element2 in element)
+                        {
+                            list.Add(GetValueFromXmlElement(element2));
+                        }
+                        return list;
+                    }
+            }
+            #endregion
 
-           if (element.Attributes["value"] == null)
-               return null;
+            if (element.Attributes["value"] == null)
+                return null;
 
-           string valueText = element.Attributes["value"].InnerText;
-           return ParseString(valueText, Tipo);
-       }
+            string valueText = element.Attributes["value"].InnerText;
+            return ParseString(valueText, Tipo);
+        }
 
-       /// <summary>
-       /// Convierte un texto a un objeto especificado compatible con la clase actual
-       /// </summary>
-       /// <param name="value"></param>
-       /// <param name="type"></param>
-       public object ParseString(string textValue, string desType)
-       {
-           switch (desType)
-           {
-               case "String":
-                   {
-                       return textValue;
-                   }
-               case "Int32":
-                   {
-                       return int.Parse(textValue);
-                   }
-               case "byte":
-                   {
-                       return byte.Parse(textValue);
-                   }
-               case "Char":
-                   {
-                       return char.Parse(textValue);
-                   }
-               case "UInt32":
-                   {
-                       return uint.Parse(textValue);
-                   }
-               case "Bool":
-                   {
-                       return bool.Parse(textValue);
-                   }
-               case "Boolean":
-                   {
-                       return bool.Parse(textValue);
-                   }
-               case "Short":
-                   {
-                       return short.Parse(textValue);
-                   }
-               case "UShort":
-                   {
-                       return ushort.Parse(textValue);
-                   }
-               case "Float":
-                   {
-                       return float.Parse(textValue.Replace('.', ','));
-                   }
-               case "Long":
-                   {
-                       return long.Parse(textValue);
-                   }
-               case "ULong":
-                   {
-                       return ulong.Parse(textValue);
-                   }
-               case "Double":
-                   {
-                       return double.Parse(textValue);
-                   }
-               case "Decimal":
-                   {
-                       return decimal.Parse(textValue);
-                   }
-               case "Single":
-                   {
-                       return Single.Parse(textValue);
-                   }
-               case "Byte[]":
-                   {
-                       byte[] buffer = Convert.FromBase64String(textValue);
-                       return buffer;
-                   }
-               case "Enum":
-                   {
-                       return textValue;
-                   }
-               case "Color":
-                   {
-                       return System.Drawing.Color.FromArgb(int.Parse(textValue, System.Globalization.NumberStyles.HexNumber));
-                   }
-               case "Point":
-                   {
-                       string[] partes = textValue.Split(',');
-                       return
-                           new System.Drawing.Point(
-                           int.Parse(partes[0]), int.Parse(partes[1]));
-                   }
-               case "Size":
-                   {
-                       string[] partes = textValue.Split(',');
-                       return
-                           new System.Drawing.Size(
-                           int.Parse(partes[0]), int.Parse(partes[1]));
-                   }
+        /// <summary>
+        /// Convierte un texto a un objeto especificado compatible con la clase actual
+        /// </summary>
+        /// <param name="value"></param>
+        /// <param name="type"></param>
+        public object ParseString(string textValue, string desType)
+        {
+            switch (desType)
+            {
+                case "String":
+                    {
+                        return textValue;
+                    }
+                case "Int32":
+                    {
+                        return int.Parse(textValue);
+                    }
+                case "byte":
+                    {
+                        return byte.Parse(textValue);
+                    }
+                case "Char":
+                    {
+                        return char.Parse(textValue);
+                    }
+                case "UInt32":
+                    {
+                        return uint.Parse(textValue);
+                    }
+                case "Bool":
+                    {
+                        return bool.Parse(textValue);
+                    }
+                case "Boolean":
+                    {
+                        return bool.Parse(textValue);
+                    }
+                case "Short":
+                    {
+                        return short.Parse(textValue);
+                    }
+                case "UShort":
+                    {
+                        return ushort.Parse(textValue);
+                    }
+                case "Float":
+                    {
+                        return float.Parse(textValue.Replace('.', ','));
+                    }
+                case "Long":
+                    {
+                        return long.Parse(textValue);
+                    }
+                case "ULong":
+                    {
+                        return ulong.Parse(textValue);
+                    }
+                case "Double":
+                    {
+                        return double.Parse(textValue);
+                    }
+                case "Decimal":
+                    {
+                        return decimal.Parse(textValue);
+                    }
+                case "Single":
+                    {
+                        return Single.Parse(textValue);
+                    }
+                case "Byte[]":
+                    {
+                        byte[] buffer = Convert.FromBase64String(textValue);
+                        return buffer;
+                    }
+                case "Enum":
+                    {
+                        return textValue;
+                    }
+                case "Color":
+                    {
+                        return System.Drawing.Color.FromArgb(int.Parse(textValue, System.Globalization.NumberStyles.HexNumber));
+                    }
+                case "Point":
+                    {
+                        string[] partes = textValue.Split(',');
+                        return
+                            new System.Drawing.Point(
+                            int.Parse(partes[0]), int.Parse(partes[1]));
+                    }
+                case "Size":
+                    {
+                        string[] partes = textValue.Split(',');
+                        return
+                            new System.Drawing.Size(
+                            int.Parse(partes[0]), int.Parse(partes[1]));
+                    }
 
-               case "Font":
-                   {
-                       string[] partes = textValue.Split(',');
-                       return
-                           new System.Drawing.Font(partes[0].Trim(),
-                           float.Parse(partes[1].Replace('.', ',')));
-                   }
+                case "Font":
+                    {
+                        string[] partes = textValue.Split(',');
+                        return
+                            new System.Drawing.Font(partes[0].Trim(),
+                            float.Parse(partes[1].Replace('.', ',')));
+                    }
 
-               case "DateTime":
-                   {
-                       return System.DateTime.Parse(textValue);
-                   }
+                case "DateTime":
+                    {
+                        return System.DateTime.Parse(textValue);
+                    }
 
-               case "TimeSpan":
-                   {
-                       return System.TimeSpan.Parse(textValue);
-                   }
-               case "Image":
-                   {
-                       Image imagen = null;
-                       System.IO.MemoryStream streamImage = new MemoryStream(10240);
-                       byte[] buffer = Convert.FromBase64String(textValue);
+                case "TimeSpan":
+                    {
+                        return System.TimeSpan.Parse(textValue);
+                    }
+                case "Image":
+                    {
+                        Image imagen = null;
+                        System.IO.MemoryStream streamImage = new MemoryStream(10240);
+                        byte[] buffer = Convert.FromBase64String(textValue);
 
-                       streamImage.Write(buffer, 0, buffer.Length);
+                        streamImage.Write(buffer, 0, buffer.Length);
 
-                       streamImage.Position = 0;
-                       imagen = Image.FromStream(streamImage);
+                        streamImage.Position = 0;
+                        imagen = Image.FromStream(streamImage);
 
-                       streamImage.Close();
-                       buffer = null;
-                       return imagen;
-                   }
+                        streamImage.Close();
+                        buffer = null;
+                        return imagen;
+                    }
 
-               case "Icon":
-                   {
-                       Icon icono = null;
-                       System.IO.MemoryStream streamIcono = new MemoryStream(textValue.Length);
-                       byte[] buffer = Convert.FromBase64String(textValue);
+                case "Icon":
+                    {
+                        Icon icono = null;
+                        System.IO.MemoryStream streamIcono = new MemoryStream(textValue.Length);
+                        byte[] buffer = Convert.FromBase64String(textValue);
 
-                       streamIcono.Write(buffer, 0, buffer.Length);
+                        streamIcono.Write(buffer, 0, buffer.Length);
 
-                       streamIcono.Position = 0;
-                       icono = new Icon(streamIcono);
+                        streamIcono.Position = 0;
+                        icono = new Icon(streamIcono);
 
-                       streamIcono.Close();
-                       buffer = null;
-                       return icono;
-                   }
-               case "Null":
-                   {
-                       return null;
-                   }
-               default:
-                   {
-                       return null;
-                   }
-           }
-       }
+                        streamIcono.Close();
+                        buffer = null;
+                        return icono;
+                    }
+                case "Null":
+                    {
+                        return null;
+                    }
+                default:
+                    {
+                        return null;
+                    }
+            }
+        }
 
-#endregion
+        #endregion
     }
 }
